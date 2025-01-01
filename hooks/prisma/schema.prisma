@@ -4,49 +4,70 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // Replace with your actual database URL in .env
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id @default(autoincrement()) // Primary key
+  id       Int       @id @default(autoincrement())
   name     String
-  email    String @unique // Emails are typically unique
+  email    String
   password String
+  zaps     Connect[]
 }
 
 model Connect {
-  id        String   @id @default(uuid()) // Primary key
-  triggerId String // Foreign key to Trigger
-  trigger   Trigger? @relation(fields: [triggerId], references: [id])
+  id          String       @id @default(uuid())
+  triggerId   String
+  userId      Int
+  trigger     Trigger?
+  actions     Action[]
+  connectRuns ConnectRun[]
+  user        User         @relation(fields: [userId], references: [id])
 }
 
 model Trigger {
-  id                String              @id @default(uuid()) // Primary key
-  connectId         String // Connect identifier
-  availableTriggers AvailableTriggers[] // One-to-many relationship
-  connect           Connect[] // One-to-many relationship with Connect
-  actions           Action[] // One-to-many relationship with Action
-}
-
-model AvailableTriggers {
-  id        String   @id @default(uuid()) // Primary key
-  name      String // Trigger name
-  triggerId String? // Foreign key (nullable)
-  trigger   Trigger? @relation(fields: [triggerId], references: [id])
-}
-
-model AvailableActions {
-  id     String   @id @default(uuid()) // Primary key
-  name   String // Action name
-  Action Action[]
+  id        String           @id @default(uuid())
+  connectId String           @unique
+  triggerId String
+  metadata  Json             @default("{}")
+  type      AvailableTrigger @relation(fields: [triggerId], references: [id])
+  connect   Connect          @relation(fields: [connectId], references: [id])
 }
 
 model Action {
-  id                String           @id @default(uuid()) // Primary key
-  availableActionId String // Foreign key to AvailableActions
-  triggerId         String // Foreign key to Trigger
-  trigger           Trigger          @relation(fields: [triggerId], references: [id])
-  availableAction   AvailableActions @relation(fields: [availableActionId], references: [id])
-  createdAt         DateTime         @default(now()) // Timestamp for action creation
-  updatedAt         DateTime         @updatedAt // Auto-updated timestamp
+  id           String          @id @default(uuid())
+  connectId    String
+  connect      Connect         @relation(fields: [connectId], references: [id])
+  actionId     String
+  metadata     Json            @default("{}")
+  type         AvailableAction @relation(fields: [actionId], references: [id])
+  sortingOrder Int             @default(0)
+}
+
+model AvailableAction {
+  id      String   @id @default(uuid())
+  name    String
+  image   String
+  actions Action[]
+}
+
+model AvailableTrigger {
+  id       String    @id @default(uuid())
+  name     String
+  image    String
+  triggers Trigger[]
+}
+
+model ConnectRun {
+  id               String            @id @default(uuid())
+  connectId        String
+  metadata         Json
+  connect          Connect           @relation(fields: [connectId], references: [id])
+  connectRunOutbox ConnectRunOutbox?
+}
+
+model ConnectRunOutbox {
+  id           String     @id @default(uuid())
+  connectRunId String     @unique
+  connectRun   ConnectRun @relation(fields: [connectRunId], references: [id])
 }
