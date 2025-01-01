@@ -12,7 +12,7 @@ model User {
   name     String
   email    String    @unique
   password String
-  zaps     Connect[]
+  connects Connect[]
 }
 
 model Connect {
