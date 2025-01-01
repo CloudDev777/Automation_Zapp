@@ -1,14 +1,35 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") // Replace with your actual database URL in .env
+}
+
+model User {
+  id       Int    @id @default(autoincrement()) // Use @id for primary keys
+  name     String
+  email    String @unique // Emails are typically unique
+  password String
+}
+
+model Connect {
+  id        String   @id @default(uuid()) // Primary key
+  triggerId String // Foreign key to Trigger
+  Trigger   Trigger? @relation(fields: [triggerId], references: [id])
+}
+
+model Trigger {
+  id        String              @id @default(uuid()) // Primary key
+  connectId String // Connect identifier
+  type      AvailableTriggers[] // One-to-many relationship
+  Connect   Connect[] // One-to-many relationship with Connect
+}
+
+model AvailableTriggers {
+  id        String   @id @default(uuid()) // Primary key
+  name      String // Trigger name
+  triggerId String? // Foreign key (nullable)
+  Trigger   Trigger? @relation(fields: [triggerId], references: [id])
 }
