@@ -17,8 +17,8 @@ model User {
 
 model Connect {
   id          String       @id @default(uuid())
-  triggerId   String
   userId      Int
+  triggerId   String
   trigger     Trigger?
   actions     Action[]
   connectRuns ConnectRun[]
