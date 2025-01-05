@@ -24,7 +24,7 @@ model User {
 model Connect {
   id                String           @id @default(uuid())
   userId            Int
-  availabeTriggerId String //availableTriggerId
+  availabeTriggerId String 
   trigger           AvailableTrigger @relation(fields: [availabeTriggerId], references: [id])
   actions           Action[]
   connectRuns       ConnectRun[]

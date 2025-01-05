@@ -16,13 +16,14 @@ model User {
 }
 
 model Connect {
-  id          String       @id @default(uuid())
-  userId      Int
-  triggerId   String
-  trigger     Trigger?
-  actions     Action[]
-  connectRuns ConnectRun[]
-  user        User         @relation(fields: [userId], references: [id])
+  id                 String            @id @default(uuid())
+  userId             Int
+  trigger            AvailableTrigger? @relation(fields: [availableTriggerId], references: [id])
+  actions            Action[]
+  connectRuns        ConnectRun[]
+  user               User              @relation(fields: [userId], references: [id])
+  availableTriggerId String?
+  Trigger            Trigger?
 }
 
 model Trigger {
@@ -56,6 +57,7 @@ model AvailableTrigger {
   name     String
   image    String?
   triggers Trigger[]
+  Connect  Connect[]
 }
 
 model ConnectRun {
