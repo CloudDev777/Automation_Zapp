@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id       Int       @id @default(autoincrement())
   name     String
@@ -23,13 +22,14 @@ model User {
 }
 
 model Connect {
-  id          String       @id @default(uuid())
-  userId      Int
-  triggerId   String
-  trigger     Trigger?
-  actions     Action[]
-  connectRuns ConnectRun[]
-  user        User         @relation(fields: [userId], references: [id])
+  id                String           @id @default(uuid())
+  userId            Int
+  availabeTriggerId String //availableTriggerId
+  trigger           AvailableTrigger @relation(fields: [availabeTriggerId], references: [id])
+  actions           Action[]
+  connectRuns       ConnectRun[]
+  user              User             @relation(fields: [userId], references: [id])
+  Trigger           Trigger?
 }
 
 model Trigger {
@@ -63,6 +63,7 @@ model AvailableTrigger {
   name     String
   image    String?
   triggers Trigger[]
+  Connect  Connect[]
 }
 
 model ConnectRun {
