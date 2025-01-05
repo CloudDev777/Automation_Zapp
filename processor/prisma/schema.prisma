@@ -12,3 +12,69 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String    @unique
+  password String
+  connects Connect[]
+}
+
+model Connect {
+  id          String       @id @default(uuid())
+  userId      Int
+  triggerId   String
+  trigger     Trigger?
+  actions     Action[]
+  connectRuns ConnectRun[]
+  user        User         @relation(fields: [userId], references: [id])
+}
+
+model Trigger {
+  id        String           @id @default(uuid())
+  connectId String           @unique
+  triggerId String
+  metadata  Json             @default("{}")
+  type      AvailableTrigger @relation(fields: [triggerId], references: [id])
+  connect   Connect          @relation(fields: [connectId], references: [id])
+}
+
+model Action {
+  id           String          @id @default(uuid())
+  connectId    String
+  connect      Connect         @relation(fields: [connectId], references: [id])
+  actionId     String
+  metadata     Json            @default("{}")
+  type         AvailableAction @relation(fields: [actionId], references: [id])
+  sortingOrder Int             @default(0)
+}
+
+model AvailableAction {
+  id      String   @id @default(uuid())
+  name    String
+  image   String?
+  actions Action[]
+}
+
+model AvailableTrigger {
+  id       String    @id @default(uuid())
+  name     String
+  image    String?
+  triggers Trigger[]
+}
+
+model ConnectRun {
+  id               String            @id @default(uuid())
+  connectId        String
+  metadata         Json
+  connect          Connect           @relation(fields: [connectId], references: [id])
+  connectRunOutbox ConnectRunOutbox?
+}
+
+model ConnectRunOutbox {
+  id           String     @id @default(uuid())
+  connectRunId String     @unique
+  connectRun   ConnectRun @relation(fields: [connectRunId], references: [id])
+}
