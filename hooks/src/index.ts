@@ -10,21 +10,21 @@ app.use(express.json());
 // password logic
 app.post("/hooks/catch/:userId/:connectId", async (req, res) => {
   const userId = req.params.userId;
-  const connectId = req.params.connectId;
+  const zapId = req.params.connectId;
   const body = req.body;
 
   // store in db a new trigger
   await client.$transaction(async (tx) => {
-    const run = await tx.connectRun.create({
+    const run = await tx.zapRun.create({
       data: {
-        connectId,
+        zapId,
         metadata: body,
       },
     });
 
-    await tx.connectRunOutbox.create({
+    await tx.zapRunOutbox.create({
       data: {
-        connectRunId: run.id,
+        zapRunId: run.id,
       },
     });
   });

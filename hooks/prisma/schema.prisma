@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,37 +14,36 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   name     String
-  email    String    @unique
+  email    String
   password String
-  connects Connect[]
+  zaps     Zap[]
 }
 
-model Connect {
-  id                 String            @id @default(uuid())
-  userId             Int
-  trigger            AvailableTrigger? @relation(fields: [availableTriggerId], references: [id])
-  actions            Action[]
-  connectRuns        ConnectRun[]
-  user               User              @relation(fields: [userId], references: [id])
-  availableTriggerId String?
-  Trigger            Trigger?
+model Zap {
+  id        String   @id @default(uuid())
+  triggerId String
+  userId    Int
+  trigger   Trigger?
+  actions   Action[]
+  zapRuns   ZapRun[]
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Trigger {
   id        String           @id @default(uuid())
-  connectId String           @unique
+  zapId     String           @unique
   triggerId String
   metadata  Json             @default("{}")
   type      AvailableTrigger @relation(fields: [triggerId], references: [id])
-  connect   Connect          @relation(fields: [connectId], references: [id])
+  zap       Zap              @relation(fields: [zapId], references: [id])
 }
 
 model Action {
   id           String          @id @default(uuid())
-  connectId    String
-  connect      Connect         @relation(fields: [connectId], references: [id])
+  zapId        String
+  zap          Zap             @relation(fields: [zapId], references: [id])
   actionId     String
   metadata     Json            @default("{}")
   type         AvailableAction @relation(fields: [actionId], references: [id])
@@ -48,28 +53,27 @@ model Action {
 model AvailableAction {
   id      String   @id @default(uuid())
   name    String
-  image   String?
+  image   String
   actions Action[]
 }
 
 model AvailableTrigger {
   id       String    @id @default(uuid())
   name     String
-  image    String?
+  image    String
   triggers Trigger[]
-  Connect  Connect[]
 }
 
-model ConnectRun {
-  id               String            @id @default(uuid())
-  connectId        String
-  metadata         Json
-  connect          Connect           @relation(fields: [connectId], references: [id])
-  connectRunOutbox ConnectRunOutbox?
+model ZapRun {
+  id           String        @id @default(uuid())
+  zapId        String
+  metadata     Json
+  zap          Zap           @relation(fields: [zapId], references: [id])
+  zapRunOutbox ZapRunOutbox?
 }
 
-model ConnectRunOutbox {
-  id           String     @id @default(uuid())
-  connectRunId String     @unique
-  connectRun   ConnectRun @relation(fields: [connectRunId], references: [id])
+model ZapRunOutbox {
+  id       String @id @default(uuid())
+  zapRunId String @unique
+  zapRun   ZapRun @relation(fields: [zapRunId], references: [id])
 }
