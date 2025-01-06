@@ -14,6 +14,7 @@ importers:
       kafkajs:
         specifier: ^2.2.4
         version: 2.2.4
+    devDependencies:
       prisma:
         specifier: ^6.1.0
         version: 6.1.0

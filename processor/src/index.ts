@@ -16,7 +16,7 @@ async function main() {
   await producer.connect();
 
   while (1) {
-    const pendingRows = await prisma.connectRunOutbox.findMany({
+    const pendingRows = await prisma.zapRunOutbox.findMany({
       take: 10,
     });
     console.log(pendingRows);
@@ -25,12 +25,12 @@ async function main() {
       topic: TOPIC_NAME,
       messages: pendingRows.map((r) => {
         return {
-          value: JSON.stringify({ zapRunId: r.connectRunId, stage: 0 }),
+          value: JSON.stringify({ zapRunId: r.zapRunId, stage: 0 }),
         };
       }),
     });
 
-    await prisma.connectRunOutbox.deleteMany({
+    await prisma.zapRunOutbox.deleteMany({
       where: {
         id: {
           in: pendingRows.map((x) => x.id),
