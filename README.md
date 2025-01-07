@@ -22,6 +22,8 @@ DATABASE_URL=postgresql://username:password@localhost:5432/zappy
 
 ## Step 2: Set Up Kafka
 
+- a great article by kafka [here](https://kafka.apache.org/quickstart)
+
 ### Option 1: Run Kafka Docker Container
 Run the following command to start a Kafka container:
 ```bash
