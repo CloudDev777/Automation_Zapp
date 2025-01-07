@@ -1,2 +1,1 @@
-# Connectify
- Connectify: Your apps, your flow, your way.
+# Zappy - mini zapier clone
