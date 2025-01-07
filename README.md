@@ -1,1 +1,1 @@
-# Zappy - mini zapier clone
+# Zappy - Just like Zapier
