@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const TOPIC_NAME = "zap-events";
 
 const kafka = new Kafka({
-  clientId: "outbox-processor",
+  clientId: "outbox-processor-2",
   brokers: ["localhost:9092"],
 });
 
@@ -34,7 +34,7 @@ async function main() {
         {
           topic,
           partition,
-          offset: (parseInt(offset) + 1).toString(), // 5
+          offset: (parseInt(offset) + 1).toString(), 
         },
       ]);
     },
