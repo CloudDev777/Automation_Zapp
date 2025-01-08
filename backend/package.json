@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/MeerUzairWasHere/TypePEN#readme",
   "dependencies": {
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.2.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",

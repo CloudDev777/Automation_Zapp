@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import "express-async-errors";
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
@@ -34,13 +34,13 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 // app.use(express.static(resolve(__dirname, "./client/dist"))); // Uncomment if you have a frontend
 
 // Security
-app.set("trust proxy", 1);
-app.use(
-  rateLimiter({
-    windowMs: 15 * 60 * 1000,
-    max: 60,
-  })
-);
+// app.set("trust proxy", 1);
+// app.use(
+//   rateLimiter({
+//     windowMs: 15 * 60 * 1000,
+//     max: 60,
+//   })
+// );
 app.use(helmet());
 app.use(cors());
 
@@ -59,7 +59,7 @@ app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
 // Port
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 
 // Start the server
 const startServer = async () => {
