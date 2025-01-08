@@ -8,8 +8,8 @@ import { getAvailableTrigger } from "../controllers/trigger.controller";
 router.route("/available").post(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-  (req: Request, res: Response, next: NextFunction) => getAvailableTrigger(req, res),
+  (req: Request, res: Response, next: NextFunction) =>
+    getAvailableTrigger(req, res)
 );
-
 
 export default router;
