@@ -26,8 +26,7 @@ router.route("/").get(
 router.route("/:zapId").get(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-  (req: Request, res: Response, next: NextFunction) => getAllZaps(req, res),
-  getSingleZap
+  (req: Request, res: Response, next: NextFunction) => getSingleZap(req, res)
 );
 
 export default router;

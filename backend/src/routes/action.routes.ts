@@ -5,7 +5,7 @@ const router = Router();
 
 import { getAvailableAction } from "../controllers/action.controller";
 
-router.route("/available").post(
+router.route("/available").get(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
   (req: Request, res: Response, next: NextFunction) =>

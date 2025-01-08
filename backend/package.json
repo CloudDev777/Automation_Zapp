@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc -b && node ./dist/index.js",
-    "dev": "./scripts/run.sh",
-    "dev:migrate": "bash ./scripts/migrate.sh",
+    "generate": "npx prisma generate",
+    "migrate": "npx prisma migrate dev",
     "build": "npm i && tsc",
     "setup": "npm i"
   },
