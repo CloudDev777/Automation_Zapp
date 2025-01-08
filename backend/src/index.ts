@@ -9,10 +9,6 @@ import rateLimiter from "express-rate-limit";
 import cors from "cors";
 
 import { prismaClient } from "./db";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
-import swaggerUi from "swagger-ui-express";
-import { openApiSpec } from "./openApiSpec";
 // Routers
 import authRouter from "./routes/auth.routes";
 import userRouter from "./routes/user.routes";
@@ -51,13 +47,6 @@ app.use(cors());
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
-
-// Remove this in production
-app.use("/documentation", swaggerUi.serve, swaggerUi.setup(openApiSpec));
-
-app.get("*", (req, res) => {
-  res.redirect("/documentation"); // comment out this route when starting
-});
 
 // Serve static files in production
 // Uncomment the below line if you have a frontend to serve in production
