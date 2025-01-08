@@ -12,6 +12,9 @@ import { prismaClient } from "./db";
 // Routers
 import authRouter from "./routes/auth.routes";
 import userRouter from "./routes/user.routes";
+import zapRouter from "./routes/zap.routes";
+import triggerRouter from "./routes/trigger.routes";
+import actionRouter from "./routes/action.routes";
 
 // Middleware
 import notFoundMiddleware from "./middlewares/not-found";
@@ -47,6 +50,9 @@ app.use(cors());
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/zap", zapRouter);
+app.use("/api/v1/trigger", triggerRouter);
+app.use("/api/v1/action", actionRouter);
 
 // Serve static files in production
 // Uncomment the below line if you have a frontend to serve in production
