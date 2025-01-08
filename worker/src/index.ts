@@ -23,12 +23,19 @@ async function main() {
       const offset = JSON.parse(message.offset.toString());
       const value = JSON.parse(message.value.toString());
 
-      console.log("Topic: ", topic);
-      console.log("Partion: ", partition);
-      console.log(`Offset: ${offset}`);
-      console.log("Value: ", value);
+      console.log(
+        `Processing message with offset ${offset} and value ${value} on topic ${topic} and in partition ${partition}`
+      );
 
-      await new Promise((r) => setTimeout(r, 3000));
+      await new Promise((r) => setTimeout(r, 1000));
+
+      await consumer.commitOffsets([
+        {
+          topic,
+          partition,
+          offset: (parseInt(offset) + 1).toString(), // 5
+        },
+      ]);
     },
   });
 }
