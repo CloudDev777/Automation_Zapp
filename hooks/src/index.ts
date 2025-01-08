@@ -2,7 +2,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 
 const client = new PrismaClient();
-
+const PORT = 3001;
 const app = express();
 app.use(express.json());
 
@@ -33,4 +33,16 @@ app.post("/hooks/catch/:userId/:zapId", async (req, res) => {
   });
 });
 
-app.listen(3002);
+// Start the server
+const startServer = async () => {
+  try {
+    await client.$connect();
+    app.listen(PORT, () => {
+      console.log(`Server is listening on http://localhost:${PORT}/...`);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+startServer();
