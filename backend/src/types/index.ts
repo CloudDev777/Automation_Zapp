@@ -28,8 +28,6 @@ export const validateRegisterInput = z.object({
 // Infer the TypeScript type for the `validateRegisterInput` schema
 export type RegisterInput = z.infer<typeof validateRegisterInput>;
 
-
-
 export const validateLoginInput = z.object({
   email: z
     .string({ required_error: "email is required" })
@@ -37,7 +35,6 @@ export const validateLoginInput = z.object({
   password: z.string({ required_error: "password is required" }),
 });
 export type LoginInput = z.infer<typeof validateLoginInput>;
-
 
 export const validateUpdateUserInput = z.object({
   name: z.string({ required_error: "name is required" }),
@@ -57,7 +54,6 @@ export const validateUpdateUserInput = z.object({
 });
 export type UpdateUserInput = z.infer<typeof validateUpdateUserInput>;
 
-
 export const validateUpdatePasswordInput = z.object({
   oldPassword: z.string({ required_error: "oldPassword is required" }),
   newPassword: z
@@ -65,7 +61,6 @@ export const validateUpdatePasswordInput = z.object({
     .min(8, { message: "password must be at least 8 characters long" }),
 });
 export type UpdatePasswordInput = z.infer<typeof validateUpdatePasswordInput>;
-
 
 export const validateVerifyEmailInput = z.object({
   verificationToken: z.string({
@@ -77,15 +72,12 @@ export const validateVerifyEmailInput = z.object({
 });
 export type VerifyEmailInput = z.infer<typeof validateVerifyEmailInput>;
 
-
 export const validateForgotPasswordInput = z.object({
   email: z
     .string({ required_error: "email is required" })
     .email({ message: "invalid email format" }),
 });
 export type ForgotPasswordInput = z.infer<typeof validateForgotPasswordInput>;
-
-
 
 export const validateResetPasswordInput = z.object({
   token: z.string({ required_error: "token is required" }),
@@ -97,3 +89,16 @@ export const validateResetPasswordInput = z.object({
     .email({ message: "invalid email format" }),
 });
 export type ResetPasswordInput = z.infer<typeof validateResetPasswordInput>;
+
+export const zapCreateSchema = z.object({
+  availableTriggerId: z.string(),
+  triggerMetadata: z.any().optional(),
+  actions: z.array(
+    z.object({
+      availableActionId: z.string(),
+      actionMetadata: z.any().optional(),
+    })
+  ),
+});
+
+export type ZapCreateInput = z.infer<typeof zapCreateSchema>;
