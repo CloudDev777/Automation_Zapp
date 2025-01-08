@@ -29,12 +29,11 @@ async function main() {
       console.log("with value: ", value);
 
       await new Promise((r) => setTimeout(r, 1000));
-
       await consumer.commitOffsets([
         {
           topic,
           partition,
-          offset: (parseInt(offset) + 1).toString(), 
+          offset: (parseInt(offset) + 1).toString(),
         },
       ]);
     },
