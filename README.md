@@ -81,6 +81,12 @@ Enter a message and press Enter to send it.
 ### Option 2: From Node.js
 The project includes a Node.js script to act as a producer. Refer to the relevant script in the codebase to produce events programmatically.
 
+### Delete Messages on a topic
+To delete all messages on a topic:
+```bash
+./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic zap-events
+```
+
 ---
 
 ## You're All Set!
