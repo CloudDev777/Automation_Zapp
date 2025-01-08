@@ -18,6 +18,7 @@ async function main() {
   await consumer.subscribe({ topic: TOPIC_NAME, fromBeginning: true });
 
   await consumer.run({
+    autoCommit: false,
     eachMessage: async ({ topic, partition, message }) => {
       const offset = JSON.parse(message.offset.toString());
       const value = JSON.parse(message.value.toString());
