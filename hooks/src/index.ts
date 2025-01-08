@@ -13,6 +13,7 @@ app.post("/hooks/catch/:userId/:zapId", async (req, res) => {
   const zapId = req.params.zapId;
   const body = req.body;
 
+
   // store in db a new trigger
   await client.$transaction(async (tx) => {
     const run = await tx.zapRun.create({
