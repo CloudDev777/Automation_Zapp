@@ -22,10 +22,11 @@ async function main() {
     eachMessage: async ({ topic, partition, message }) => {
       const offset = JSON.parse(message.offset.toString());
       const value = JSON.parse(message.value.toString());
-
+      console.log("\n");
       console.log(
-        `Processing message with offset ${offset} and value ${value} on topic ${topic} and in partition ${partition}`
+        `Processing message with offset ${offset} on topic ${topic} and in partition ${partition}`
       );
+      console.log("with value: ", value);
 
       await new Promise((r) => setTimeout(r, 1000));
 
