@@ -5,5 +5,7 @@ import { UnauthenticatedError } from "../errors";
 import { prismaClient } from "../db";
 
 export const getAvailableTrigger = async (req: Request, res: Response) => {
-  res.status(StatusCodes.OK).json({ msg: "Get Available Trigger" });
+  const availableTriggers = await prismaClient.availableTrigger.findMany({});
+
+  res.status(StatusCodes.OK).json({ availableTriggers });
 };
