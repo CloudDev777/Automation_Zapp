@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 
 import { prismaClient } from "../db";
 import { CreateAvailableTriggerInput } from "../types";
+import { NotFoundError } from "../errors";
 
 export const createAvailableTrigger = async (
   req: Request<{}, {}, CreateAvailableTriggerInput>,
@@ -34,10 +35,8 @@ export const deleteAvailableTrigger = async (req: Request, res: Response) => {
   });
 
   if (!exists) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ msg: `${id} does not exists!` });
-  }
+     throw new NotFoundError(`${id} does not exists!`);
+   }
 
   await prismaClient.availableTrigger.delete({
     where: {

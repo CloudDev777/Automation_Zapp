@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 
 import { prismaClient } from "../db";
 import { CreateAvailableActionInput } from "../types";
+import { NotFoundError } from "../errors";
 
 export const createAvailableAction = async (
   req: Request<{}, {}, CreateAvailableActionInput>,
@@ -34,9 +35,7 @@ export const deleteAvailableAction = async (req: Request, res: Response) => {
   });
 
   if (!exists) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ msg: `${id} does not exists!` });
+    throw new NotFoundError(`${id} does not exists!`);
   }
 
   await prismaClient.availableAction.delete({
