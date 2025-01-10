@@ -3,13 +3,36 @@ import { authenticateUser } from "../middlewares/authentication";
 
 const router = Router();
 
-import { getAvailableAction } from "../controllers/action.controller";
+import {
+  createAvailableAction,
+  deleteAvailableAction,
+  getAvailableAction,
+} from "../controllers/action.controller";
+import { validateAvailableActionInputMiddleware } from "../middlewares/validationMiddleware";
 
-router.route("/available").get(
+router
+  .route("/")
+  .get(
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticateUser(req, res, next),
+    (req: Request, res: Response, next: NextFunction) =>
+      getAvailableAction(req, res)
+  )
+  .post(
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticateUser(req, res, next),
+    validateAvailableActionInputMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      createAvailableAction(req, res)
+  );
+
+router.route("/:id").delete(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-  (req: Request, res: Response, next: NextFunction) =>
-    getAvailableAction(req, res)
+
+  async (req: Request<{ id: string }>, res: Response) => {
+    await deleteAvailableAction(req, res);
+  }
 );
 
 export default router;
