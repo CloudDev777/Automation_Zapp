@@ -9,6 +9,7 @@ import {
   validateUpdatePasswordInput,
   validateUpdateUserInput,
   validateVerifyEmailInput,
+  zapCreateSchema,
 } from "../types";
 
 // Utility function to handle Zod validation errors
@@ -60,3 +61,6 @@ export const validateUpdateUserInputMiddleware = withValidationErrors(
 
 export const validateLoginInputMiddleware =
   withValidationErrors(validateLoginInput);
+
+export const validateZapInputMiddleware =
+  withValidationErrors(zapCreateSchema);

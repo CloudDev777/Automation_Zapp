@@ -8,10 +8,12 @@ import {
   getAllZaps,
   getSingleZap,
 } from "../controllers/zap.controller";
+import { validateZapInputMiddleware } from "../middlewares/validationMiddleware";
 
 router.route("/").post(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
+  validateZapInputMiddleware,
   (req: Request, res: Response, next: NextFunction) => createZap(req, res),
   getAllZaps
 );
