@@ -29,7 +29,7 @@ const withValidationErrors =
         if (firstMessage.startsWith("not authorized")) {
           throw new UnauthorizedError("not authorized to access this route");
         }
-        throw new BadRequestError(errorMessages.join(", "));
+        throw new BadRequestError(errorMessages.join(" & "));
       }
       next(err);
     }
