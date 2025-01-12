@@ -35,7 +35,7 @@ export const deleteAvailableTrigger = async (req: Request, res: Response) => {
   });
 
   if (!exists) {
-     throw new NotFoundError(`${id} does not exists!`);
+     throw new NotFoundError(`Available Trigger with id: ${id} does not exists!`);
    }
 
   await prismaClient.availableTrigger.delete({
