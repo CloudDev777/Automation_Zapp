@@ -35,7 +35,7 @@ export const deleteAvailableAction = async (req: Request, res: Response) => {
   });
 
   if (!exists) {
-    throw new NotFoundError(`${id} does not exists!`);
+    throw new NotFoundError(`Available Action with id: ${id} does not exists!`);
   }
 
   await prismaClient.availableAction.delete({
