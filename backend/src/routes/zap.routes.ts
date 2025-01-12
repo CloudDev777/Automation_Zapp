@@ -8,6 +8,7 @@ import {
   getAllZaps,
   getSingleZap,
 } from "../controllers/zap.controller";
+
 import { validateZapInputMiddleware } from "../middlewares/validationMiddleware";
 
 router.route("/").post(
