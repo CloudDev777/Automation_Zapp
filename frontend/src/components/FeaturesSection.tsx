@@ -2,7 +2,7 @@ import { BarChart, Blocks, Workflow } from "lucide-react";
 
 const FeaturesSection = () => {
   return (
-    <section className="py-24 bg-gray-50">
+    <section id="features" className="py-24 bg-gray-50">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold text-center mb-16">How It Works</h2>
         <div className="grid md:grid-cols-3 gap-12">

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+    <header id="hero" className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -11,19 +11,19 @@ const HeroSection = () => {
             <span className="ml-2 text-xl font-bold">Zappy</span>
           </div>
           <div className="hidden md:flex space-x-8">
-            <a href="#" className="hover:text-purple-200">
-              Solutions
-            </a>
-            <a href="#" className="hover:text-purple-200">
-              Pricing
-            </a>
-            <a href="#" className="hover:text-purple-200">
-              Resources
-            </a>
+            <Link to="#home" className="hover:text-purple-200">
+              Home
+            </Link>
+            <Link to="#features" className="hover:text-purple-200">
+              Features
+            </Link>
+            <Link to="#contact" className="hover:text-purple-200">
+              Contact
+            </Link>
           </div>
-          <button className="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors">
-            Get Started Free
-          </button>
+          <Link to={'sign-in'} className="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors">
+            Sign In
+          </Link>
         </div>
       </nav>
 

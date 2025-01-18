@@ -1,6 +1,6 @@
 const CTAsection = () => {
   return (
-    <section className="bg-purple-600 text-white py-24">
+    <section id = "contact" className="bg-purple-600 text-white py-24">
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-4xl font-bold mb-8">Ready to Get Started?</h2>
         <p className="text-xl mb-12 max-w-2xl mx-auto">
