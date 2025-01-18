@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Zap, ArrowRight } from "lucide-react";
+import { useDashboardContext } from "@/layouts/DashboardLayout";
 
 function SignUpPage() {
+
+  if (useDashboardContext() === null) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");

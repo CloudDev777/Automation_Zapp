@@ -1,9 +1,10 @@
-import { redirect } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import { Zap, ArrowRight } from "lucide-react";
 import customFetch from "@/utils/fetch";
 import { QueryClient } from "@tanstack/react-query";
 import { Form } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useDashboardContext } from "@/layouts/DashboardLayout";
 
 export const action =
   (queryClient: QueryClient) =>
@@ -12,7 +13,8 @@ export const action =
     const data = Object.fromEntries(formData);
     try {
       await customFetch.post("/auth/login", data);
-      queryClient.invalidateQueries();
+      // @ts-ignore
+      queryClient.invalidateQueries(["user"]);
       toast.success("Login successful");
       return redirect("/dashboard");
     } catch (error) {
@@ -22,6 +24,15 @@ export const action =
   };
 
 function SignInPage() {
+  const { user } = useDashboardContext();
+  console.log(user);
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  // if (!user) {
+  //   return <Navigate to="/sign-in" replace />;
+  // }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">

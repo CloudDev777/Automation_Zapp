@@ -14,6 +14,10 @@ import { GlobalLayout, DashboardLayout } from "./layouts";
 import { action as signInAction } from "./pages/SignInPage";
 
 // Loaders imports
+import { loader as dashboardLoader } from "./layouts/DashboardLayout";
+
+// Components imports
+import { Error } from "./components";
 
 // Query Client Instance
 const queryClient = new QueryClient({
@@ -28,7 +32,9 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <GlobalLayout />,
+    element: <GlobalLayout queryClient={queryClient} />,
+    loader: globalLoader(queryClient),
+    errorElement: <Error />,
     children: [
       {
         index: true,
@@ -47,7 +53,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: <DashboardLayout queryClient={queryClient} />,
+    loader: dashboardLoader(queryClient),
+    errorElement: <div>Error</div>,
+
     children: [
       {
         index: true,
