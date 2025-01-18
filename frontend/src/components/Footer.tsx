@@ -22,7 +22,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 text-sm text-gray-500 text-center">
-          © 2024 Zappy. All rights reserved.
+          © 2025 Zappy. All rights reserved.
         </div>
       </div>
     </footer>
