@@ -66,7 +66,7 @@ const DashboardLayout = ({ queryClient }: { queryClient: QueryClient }) => {
 
   return (
     <>
-      <DashboardContext.Provider value={user}>
+      <DashboardContext.Provider value={{ user, logoutUser }}>
         <main>
           <ProtectedRoute>
             <Outlet />

@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Pages imports
-import { LandingPage, SignInPage, SignUpPage } from "./pages";
+import { DashboardPage, LandingPage, SignInPage, SignUpPage } from "./pages";
 
 // Layouts imports
 import { GlobalLayout, DashboardLayout } from "./layouts";
@@ -54,12 +54,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardLayout queryClient={queryClient} />,
     loader: dashboardLoader(queryClient),
-    errorElement: <div>Error</div>,
-
     children: [
       {
         index: true,
-        element: <div>Dashboard</div>,
+        element: <DashboardPage />,
       },
     ],
   },
