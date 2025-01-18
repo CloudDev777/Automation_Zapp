@@ -1,10 +1,23 @@
+//Third party imports
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import GlobalLayout from "./layouts/GlobalLayout";
-import LandingPage from "./pages/LandingPage";
+
+//Pages imports
+import { LandingPage, SignInPage, SignUpPage } from "./pages";
+
+//Layouts imports
+import { GlobalLayout } from "./layouts";
 
 const router = createBrowserRouter([
+  {
+    path: "sign-in",
+    element: <SignInPage />,
+  },
+  {
+    path: "sign-up",
+    element: <SignUpPage />,
+  },
   {
     path: "/",
     element: <GlobalLayout />,
@@ -14,7 +27,7 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "/about",
+        path: "about",
         element: <div>About</div>,
       },
     ],
