@@ -1,18 +1,28 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Form, Link, redirect } from "react-router-dom";
 import { Zap, ArrowRight } from "lucide-react";
+import { QueryClient } from "@tanstack/react-query";
+import customFetch from "@/utils/fetch";
+import toast from "react-hot-toast";
 
-function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle sign up logic here
-    console.log("Sign up:", { name, email, password });
+export const action =
+  (queryClient: QueryClient) =>
+  async ({ request }: { request: Request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    try {
+      await customFetch.post("/auth/register", data);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast.success("User registered Successfully!"); // TODO: Change this message when we set up email verification
+      return redirect("/");
+    } catch (error) {
+      console.log(error);
+      // @ts-ignore
+      toast.error(error?.response?.data?.message);
+      return error;
+    }
   };
 
+function SignUpPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -38,7 +48,7 @@ function SignUpPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <Form method="post" className="space-y-6">
             <div>
               <label
                 htmlFor="name"
@@ -53,8 +63,6 @@ function SignUpPage() {
                   type="text"
                   autoComplete="name"
                   required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 />
               </div>
@@ -74,8 +82,6 @@ function SignUpPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 />
               </div>
@@ -95,8 +101,6 @@ function SignUpPage() {
                   type="password"
                   autoComplete="new-password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                 />
               </div>
@@ -133,7 +137,7 @@ function SignUpPage() {
                 Create Account <ArrowRight className="ml-2 w-4 h-4" />
               </button>
             </div>
-          </form>
+          </Form>
 
           {/* <div className="mt-6">
             <div className="relative">

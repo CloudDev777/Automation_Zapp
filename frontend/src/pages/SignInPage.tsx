@@ -12,8 +12,7 @@ export const action =
     const data = Object.fromEntries(formData);
     try {
       await customFetch.post("/auth/login", data);
-      // @ts-ignore
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       toast.success("Login successful");
       return redirect("/dashboard");
     } catch (error) {
@@ -61,6 +60,7 @@ function SignInPage() {
                   id="email"
                   name="email"
                   type="email"
+                  value={"testuser@yopmail.com"} // TODO: Remove this attribute later
                   autoComplete="email"
                   required
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
@@ -80,6 +80,7 @@ function SignInPage() {
                   id="password"
                   name="password"
                   type="password"
+                  value={"123123123"} // TODO: Remove this attribute later
                   autoComplete="current-password"
                   required
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"

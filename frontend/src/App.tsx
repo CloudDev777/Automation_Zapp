@@ -12,6 +12,7 @@ import { GlobalLayout, DashboardLayout } from "./layouts";
 
 // Action imports
 import { action as signInAction } from "./pages/SignInPage";
+import { action as signUpAction } from "./pages/SignUpPage";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
       {
         path: "sign-up",
         element: <SignUpPage />,
+        action: signUpAction(queryClient),
       },
     ],
   },
@@ -67,7 +69,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools position="left"  initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }
