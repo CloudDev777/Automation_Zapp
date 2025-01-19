@@ -8,17 +8,20 @@ const LogOutModal = () => {
   const { logoutUser } = useDashboardStore();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
   return (
     <>
       <button
-        className="nav-link active-link flex items-center px-6 py-3 text-gray-700 transition-colors   hover:bg-purple-700 hover:text-white"
-        // @ts-ignore
-        onClick={() => document.getElementById("confirm_model").showModal()}
+        className="w-full flex items-center px-6 py-3 text-gray-700 transition-colors hover:bg-purple-700 hover:text-white"
+        onClick={() => {
+          // @ts-ignore
+          document.getElementById("my_modal_5").showModal();
+        }}
       >
         <LogOutIcon className="w-5 h-5 mr-3" />
         Logout
       </button>
-      <dialog id="confirm_model" className="modal modal-bottom sm:modal-middle">
+      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Log Out</h3>
           <p className="py-4">
