@@ -4,7 +4,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Pages imports
-import { DashboardPage, LandingPage, SignInPage, SignUpPage } from "./pages";
+import {
+  DashboardPage,
+  HistoryPage,
+  LandingPage,
+  ProfilePage,
+  SignInPage,
+  SignUpPage,
+  ZapsPage,
+} from "./pages";
 
 // Layouts imports
 import { GlobalLayout, DashboardLayout } from "./layouts";
@@ -60,6 +68,18 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardPage />,
       },
+      {
+        path: "zaps",
+        element: <ZapsPage />,
+      },
+      {
+        path: "history",
+        element: <HistoryPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
+      },
     ],
   },
 ]);
@@ -68,7 +88,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <ReactQueryDevtools position="bottom"  initialIsOpen={false} />
+      <ReactQueryDevtools position="bottom" initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
