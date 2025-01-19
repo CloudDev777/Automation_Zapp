@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Outlet, redirect, useNavigate, Navigate } from "react-router-dom";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { userQuery } from "@/lib/queries";
+import { SideBar } from "@/components";
 
 export const loader = (queryClient: QueryClient) => async () => {
   try {
@@ -47,11 +48,14 @@ const DashboardLayout = ({ queryClient }: { queryClient: QueryClient }) => {
   }, [isAuthError, logoutUser, queryClient, navigate]);
 
   return (
-    <main>
-      <ProtectedRoute>
-        <Outlet />
-      </ProtectedRoute>
-    </main>
+    <ProtectedRoute>
+      <main className="flex">
+        <SideBar />
+        <section className="flex-1 overflow-y-auto h-screen bg-[#E5E7EB] p-6">
+          <Outlet />
+        </section>
+      </main>
+    </ProtectedRoute>
   );
 };
 
