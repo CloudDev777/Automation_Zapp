@@ -5,3 +5,4 @@ export { default as Footer } from "./Footer";
 export { default as BackToTop } from "./BackToTop";
 export { default as SocialProofSection } from "./SocialProofSection";
 export { default as Error } from "./Error";
+export { default as LogoutButton } from "./LogoutButton";
