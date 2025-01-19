@@ -1,14 +1,31 @@
-import { useDashboardStore } from "@/store/dashboardStore";
+import { QueryClient } from "@tanstack/react-query";
+import { NavigateFunction } from "react-router-dom";
 
-const LogoutButton = () => {
-  // const { user } = useDashboardStore((state) => state.user);
-  const logoutUser = useDashboardStore((state) => state.logoutUser);
+interface LogoutButtonProps {
+  logoutUser: (
+    queryClient: QueryClient,
+    navigate: NavigateFunction
+  ) => Promise<void>;
+  queryClient: QueryClient;
+  navigate: NavigateFunction;
+}
 
+const LogoutButton = ({
+  logoutUser,
+  queryClient,
+  navigate,
+}: LogoutButtonProps) => {
+  const handleLogout = async () => {
+    await logoutUser(queryClient, navigate);
+  };
   return (
-    <div>
-      {/* <h1>Welcome {user.name}</h1> */}
-      <button onClick={logoutUser}>Logout</button>
-    </div>
+    <button
+      onClick={handleLogout}
+      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+    >
+      Logout
+    </button>
   );
 };
+
 export default LogoutButton;
