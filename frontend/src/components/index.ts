@@ -8,3 +8,6 @@ export { default as Error } from "./Error";
 export { default as LogoutButton } from "./LogoutButton";
 export { default as SideBar } from "./SideBar";
 export { default as LogOutModal } from "./LogOutModal";
+export { default as MobileSidebar } from "./MobileSidebar";
+export { default as MobileSidebarButton } from "./MobileSidebarButton";
+export { default as SideBarUserProfile } from "./SidebarUserProfile";
