@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Outlet, redirect, useNavigate, Navigate } from "react-router-dom";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { userQuery } from "@/lib/queries";
-import { SideBar } from "@/components";
+import { MobileSidebar, SideBar } from "@/components";
 
 export const loader = (queryClient: QueryClient) => async () => {
   try {
@@ -51,6 +51,7 @@ const DashboardLayout = ({ queryClient }: { queryClient: QueryClient }) => {
     <ProtectedRoute>
       <main className="flex">
         <SideBar />
+        <MobileSidebar />
         <section className="flex-1 overflow-y-auto h-screen bg-[#E5E7EB] p-6">
           <Outlet />
         </section>
