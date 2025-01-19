@@ -6,3 +6,5 @@ export { default as BackToTop } from "./BackToTop";
 export { default as SocialProofSection } from "./SocialProofSection";
 export { default as Error } from "./Error";
 export { default as LogoutButton } from "./LogoutButton";
+export { default as SideBar } from "./SideBar";
+export { default as LogOutModal } from "./LogOutModal";
