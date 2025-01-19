@@ -1,4 +1,4 @@
 const DashboardPage = () => {
-  return <div>home</div>;
+  return <div className="bg-gray-100 w-full h-screen">DashboardPage</div>;
 };
 export default DashboardPage;
