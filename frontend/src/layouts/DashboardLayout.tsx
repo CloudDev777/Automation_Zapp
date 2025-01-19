@@ -1,28 +1,22 @@
 import customFetch from "@/utils/fetch";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { useContext, useEffect, createContext, useState } from "react";
-import toast from "react-hot-toast";
-import { Outlet, redirect, useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
-const userQuery = {
+import { Outlet, redirect, useNavigate, Navigate } from "react-router-dom";
+import { useDashboardStore } from "@/store/dashboardStore";
+
+// Query configuration
+export const userQuery = {
   queryKey: ["user"],
   queryFn: async () => {
     const { data } = await customFetch.get("/users/current-user");
-    console.log(data);
-
-    if (data) {
-      return data;
-    }
-    return null;
+    // Use setState to update the store
+    useDashboardStore.setState({ user: data });
+    return data;
   },
 };
 
-// Protected route wrapper (redirects to sign-in if not logged in)
-export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  return useDashboardContext() ? children : <Navigate to="/sign-in" replace />;
-};
-
+// Loader function
 export const loader = (queryClient: QueryClient) => async () => {
   try {
     return await queryClient.ensureQueryData(userQuery);
@@ -31,26 +25,21 @@ export const loader = (queryClient: QueryClient) => async () => {
   }
 };
 
-const DashboardContext = createContext<any>({});
+// Protected route wrapper
+export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const user = useDashboardStore((state) => state.user);
+  return user ? children : <Navigate to="/sign-in" replace />;
+};
 
+// Dashboard Layout component
 const DashboardLayout = ({ queryClient }: { queryClient: QueryClient }) => {
-  const { user } = useQuery(userQuery)?.data;
   const navigate = useNavigate();
-  // const navigation = useNavigation();
-  // const isPageLoading = navigation.state === "loading";
-  const [isAuthError, setIsAuthError] = useState(false);
+  // const { data: userData } = useQuery(userQuery);
+  const { isAuthError, setIsAuthError, logoutUser } = useDashboardStore();
 
-  const logoutUser = async () => {
-    await customFetch.get("/auth/logout");
-    queryClient.invalidateQueries();
-    toast.success("Logging out...");
-    navigate("/");
-  };
-
+  // Set up axios interceptor
   customFetch.interceptors.response.use(
-    (response) => {
-      return response;
-    },
+    (response) => response,
     (error) => {
       if (error?.response?.status === 401) {
         setIsAuthError(true);
@@ -59,24 +48,24 @@ const DashboardLayout = ({ queryClient }: { queryClient: QueryClient }) => {
     }
   );
 
+  // Handle auth errors
   useEffect(() => {
     if (!isAuthError) return;
-    logoutUser();
-  }, [isAuthError]);
+    const handleLogout = async () => {
+      await logoutUser();
+      queryClient.invalidateQueries();
+      navigate("/");
+    };
+    handleLogout();
+  }, [isAuthError, logoutUser, queryClient, navigate]);
 
   return (
-    <>
-      <DashboardContext.Provider value={{ user, logoutUser }}>
-        <main>
-          <ProtectedRoute>
-            <Outlet />
-          </ProtectedRoute>
-        </main>
-      </DashboardContext.Provider>
-    </>
+    <main>
+      <ProtectedRoute>
+        <Outlet />
+      </ProtectedRoute>
+    </main>
   );
 };
-// @ts-ignore
-export const useDashboardContext = () => useContext(DashboardContext);
 
 export default DashboardLayout;
