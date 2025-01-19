@@ -1,13 +1,9 @@
 import customFetch from "@/utils/fetch";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-
 import { Outlet, redirect, useNavigate, Navigate } from "react-router-dom";
 import { useDashboardStore } from "@/store/dashboardStore";
-import LogoutButton from "@/components/LogoutButton";
 import { userQuery } from "@/lib/queries";
-
-
 
 export const loader = (queryClient: QueryClient) => async () => {
   try {
@@ -55,11 +51,6 @@ const DashboardLayout = ({ queryClient }: { queryClient: QueryClient }) => {
       <ProtectedRoute>
         <Outlet />
       </ProtectedRoute>
-      <LogoutButton
-        logoutUser={logoutUser}
-        queryClient={queryClient}
-        navigate={navigate}
-      />
     </main>
   );
 };
