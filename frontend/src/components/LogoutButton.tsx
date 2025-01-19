@@ -19,7 +19,10 @@ const LogoutButton = ({
     await logoutUser(queryClient, navigate);
   };
   return (
-    <button onClick={handleLogout} className="btn btn-primary">
+    <button
+      onClick={handleLogout}
+      className="w-full lg:w-auto flex lg:btn items-center ml-3 py-3  transition-colors hover:bg-purple-700 hover:text-white lg:text-white-700 lg:btn-primary"
+    >
       Logout
     </button>
   );
