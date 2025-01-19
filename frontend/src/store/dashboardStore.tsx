@@ -1,23 +1,26 @@
 import customFetch from "@/utils/fetch";
-import toast from "react-hot-toast";
+import { QueryClient } from "@tanstack/react-query";
 import { create } from "zustand";
 
-// Define the store state type
 interface DashboardStore {
-  user: any | null;
   isAuthError: boolean;
   setIsAuthError: (error: boolean) => void;
-  logoutUser: () => Promise<void>;
+  logoutUser: (
+    queryClient: QueryClient,
+    navigate: (path: string) => void
+  ) => Promise<void>;
 }
 
-// Create the Zustand store
 export const useDashboardStore = create<DashboardStore>((set) => ({
-  user: null,
   isAuthError: false,
   setIsAuthError: (error) => set({ isAuthError: error }),
-  logoutUser: async () => {
-    await customFetch.delete("/auth/logout");
-    set({ user: null });
-    toast.success("Logging out...");
+  logoutUser: async (queryClient, navigate) => {
+    try {
+      await customFetch.delete("/auth/logout");
+      queryClient.clear(); // Clear all queries
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   },
 }));
