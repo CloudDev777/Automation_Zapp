@@ -5,6 +5,7 @@ export interface TokenUser {
   name: string;
   userId: number;
   role: string;
+  email: string;
 }
 
 // Updated Zod schemas for each validation set

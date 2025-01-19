@@ -31,6 +31,7 @@ export const authenticateUser = async (
       userId: payload.user.userId,
       name: payload.user.name,
       role: payload.user.role,
+      email: payload.user.email,
     };
 
     next();
