@@ -1,5 +1,8 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { authenticateUser } from "../middlewares/authentication";
+import {
+  authenticateUser,
+  authorizePermissions,
+} from "../middlewares/authentication";
 
 const router = Router();
 
@@ -21,6 +24,8 @@ router
   .post(
     (req: Request, res: Response, next: NextFunction) =>
       authenticateUser(req, res, next),
+    authorizePermissions("admin"),
+
     validateAvailableActionInputMiddleware,
     (req: Request, res: Response, next: NextFunction) =>
       createAvailableAction(req, res)
@@ -29,7 +34,7 @@ router
 router.route("/:id").delete(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-
+  authorizePermissions("admin"),
   async (req: Request<{ id: string }>, res: Response) => {
     await deleteAvailableAction(req, res);
   }

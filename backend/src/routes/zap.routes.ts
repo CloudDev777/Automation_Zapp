@@ -1,5 +1,8 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { authenticateUser } from "../middlewares/authentication";
+import {
+  authenticateUser,
+  authorizePermissions,
+} from "../middlewares/authentication";
 
 const router = Router();
 
@@ -14,16 +17,15 @@ import { validateZapInputMiddleware } from "../middlewares/validationMiddleware"
 router.route("/").post(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
+  authorizePermissions("admin"),
   validateZapInputMiddleware,
-  (req: Request, res: Response, next: NextFunction) => createZap(req, res),
-  getAllZaps
+  (req: Request, res: Response, next: NextFunction) => createZap(req, res)
 );
 
 router.route("/").get(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-  (req: Request, res: Response, next: NextFunction) => getAllZaps(req, res),
-  getAllZaps
+  (req: Request, res: Response, next: NextFunction) => getAllZaps(req, res)
 );
 
 router.route("/:zapId").get(
