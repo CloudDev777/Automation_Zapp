@@ -14,3 +14,4 @@ export { default as SideBarUserProfile } from "./SidebarUserProfile";
 export { default as PageHeader } from "./PageHeader";
 export { default as MobileAppHeader } from "./MobileAppHeader";
 export { default as ZapListTable } from "./ZapListTable";
+export { default as ZapPublishButton } from "./ZapPublishButton";
