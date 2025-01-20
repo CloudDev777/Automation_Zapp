@@ -90,8 +90,16 @@ export const getAllZaps = async (req: Request, res: Response) => {
       userId: req.user?.userId,
     },
     include: {
-      actions: true,
-      trigger: true,
+      actions: {
+        include: {
+          type: true,
+        },
+      },
+      trigger: {
+        include: {
+          type: true,
+        },
+      },
       zapRuns: true,
     },
   });
@@ -108,7 +116,11 @@ export const getSingleZap = async (req: Request, res: Response) => {
     },
     include: {
       actions: true,
-      trigger: true,
+      trigger: {
+        include: {
+          zap: true,
+        },
+      },
       zapRuns: true,
     },
   });

@@ -50,9 +50,9 @@ app.use(cors());
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/zap", zapRouter);
-app.use("/api/v1/trigger", triggerRouter);
-app.use("/api/v1/action", actionRouter);
+app.use("/api/v1/zaps", zapRouter);
+app.use("/api/v1/triggers", triggerRouter);
+app.use("/api/v1/actions", actionRouter);
 
 // Serve static files in production
 // Uncomment the below line if you have a frontend to serve in production
