@@ -1,4 +1,10 @@
+import { PageHeader } from "@/components";
+
 const ZapsPage = () => {
-  return <div>ZapsPage</div>;
+  return (
+    <>
+      <PageHeader />
+    </>
+  );
 };
 export default ZapsPage;
