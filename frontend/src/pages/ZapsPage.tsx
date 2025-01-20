@@ -1,7 +1,7 @@
 import { PageHeader, ZapListTable } from "@/components";
 import { zapsQuery } from "@/lib/queries";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { data, redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
 
 export const loader = (queryClient: QueryClient) => async () => {
   try {
