@@ -25,7 +25,7 @@ import {
 
 export const registerUser = async (
   req: Request<{}, {}, RegisterInput>,
-  res: Response<{ user: User; msg: string }>
+  res: Response<{ msg: string }>
 ) => {
   const { email, name, password } = req.body;
 
@@ -58,7 +58,6 @@ export const registerUser = async (
   //   });
 
   res.status(StatusCodes.CREATED).json({
-    user,
     msg: "User created successfully",
   });
 };
