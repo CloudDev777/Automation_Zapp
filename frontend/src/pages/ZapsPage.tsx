@@ -18,6 +18,7 @@ const ZapsPage = () => {
     <>
       <PageHeader
         title="Zaps"
+        link={true}
         description="Create and customize your automation workflow"
         butttonText="Create"
       />
