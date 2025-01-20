@@ -6,7 +6,7 @@ interface Props {
   butttonText: string;
   link?: boolean;
 }
-const PageHeader = ({ title, description, butttonText,link }: Props) => {
+const PageHeader = ({ title, description, butttonText, link }: Props) => {
   return (
     <header className="bg-white border border-neutral-200/20 rounded-lg p-4 mb-6">
       <div className="flex justify-between items-center">
