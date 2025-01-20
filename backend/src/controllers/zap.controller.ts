@@ -90,6 +90,11 @@ export const getAllZaps = async (req: Request, res: Response) => {
     where: {
       userId: req.user?.userId,
     },
+    include: {
+      actions: true,
+      trigger: true,
+      zapRuns: true,
+    },
   });
   res.status(StatusCodes.OK).json({ zaps });
 };
