@@ -40,22 +40,25 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                         {zap.zapName}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {zap.trigger.type.name} → {zap.actions.map((action) => action.type.name).join(" → ")}
+                        {zap.trigger.type.name} →{" "}
+                        {zap.actions
+                          .map((action) => action.type.name)
+                          .join(" → ")}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Active //TODO: Add active status
+                    Active {/*TODO: Add active status */}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  5 minutes ago //TODO: Add time
+                  5 minutes ago {/*TODO: Add time  */}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <button className="text-indigo-600 hover:text-indigo-900 mr-3">
-                    Edit  
+                    Edit
                   </button>
                   <button className="text-red-600 hover:text-red-900">
                     Delete
