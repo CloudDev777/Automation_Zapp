@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Pages imports
 import {
+  CreateZapPage,
   DashboardPage,
   HistoryPage,
   LandingPage,
@@ -15,7 +16,7 @@ import {
 } from "./pages";
 
 // Layouts imports
-import { GlobalLayout, DashboardLayout } from "./layouts";
+import { GlobalLayout, DashboardLayout, ZapsLayout } from "./layouts";
 
 // Action imports
 import { action as signInAction } from "./pages/SignInPage";
@@ -71,8 +72,18 @@ const router = createBrowserRouter([
       },
       {
         path: "zaps",
-        element: <ZapsPage />,
+        element: <ZapsLayout />,
         loader: zapsLoader(queryClient),
+        children: [
+          {
+            index: true,
+            element: <ZapsPage />,
+          },
+          {
+            path: "create",
+            element: <CreateZapPage />,
+          },
+        ],
       },
       {
         path: "history",
