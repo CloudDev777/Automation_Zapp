@@ -16,3 +16,19 @@ export const zapsQuery = {
     return data;
   },
 };
+
+export const availableTriggersQuery = {
+  queryKey: ["availableTriggers"],
+  queryFn: async () => {
+    const { data } = await customFetch.get("/triggers");
+    return data;
+  },
+};
+
+export const availableActionsQuery = {
+  queryKey: ["availableActions"],
+  queryFn: async () => {
+    const { data } = await customFetch.get("/actions");
+    return data;
+  },
+};
