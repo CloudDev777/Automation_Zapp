@@ -4,7 +4,7 @@
   "description": "A TypeScript-based backend starter with PostgreSQL, Express, and Node.js. Flexible and frontend-agnostic—connect with React, Angular, Vue, or any framework!",
   "main": "index.js",
   "scripts": {
-    "start": "tsc -b && node ./dist/index.js",
+    "dev": "tsc -b && node ./dist/index.js",
     "generate": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
     "build": "npm i && tsc",
