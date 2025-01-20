@@ -23,6 +23,7 @@ import { action as signUpAction } from "./pages/SignUpPage";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
+import { loader as zapsLoader } from "./pages/ZapsPage";
 
 // Components imports
 import { Error } from "./components";
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
       {
         path: "zaps",
         element: <ZapsPage />,
+        loader: zapsLoader(queryClient),
       },
       {
         path: "history",

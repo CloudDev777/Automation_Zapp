@@ -9,4 +9,10 @@ export const userQuery = {
   },
 };
 
-
+export const zapsQuery = {
+  queryKey: ["zaps"],
+  queryFn: async () => {
+    const { data } = await customFetch.get("/zaps");
+    return data;
+  },
+};

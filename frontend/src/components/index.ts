@@ -13,3 +13,4 @@ export { default as MobileSidebarButton } from "./MobileSidebarButton";
 export { default as SideBarUserProfile } from "./SidebarUserProfile";
 export { default as PageHeader } from "./PageHeader";
 export { default as MobileAppHeader } from "./MobileAppHeader";
+export { default as ZapListTable } from "./ZapListTable";
