@@ -11,7 +11,7 @@ export const createZap = async (
 ) => {
   const userId = req.user?.userId!;
 
-  const { actions, availableTriggerId, triggerMetadata } = req.body;
+  const { actions, zapName, availableTriggerId, triggerMetadata } = req.body;
 
   const triggerExists = await prismaClient.availableTrigger.findFirst({
     where: {
@@ -37,17 +37,16 @@ export const createZap = async (
     const missingActions = actions
       .map((x) => x.availableActionId)
       .filter((id) => !actionExists.some((action) => action.id === id));
-    console.log("Missing actions:", missingActions); // Debugging the missing actions
+    console.log("Missing actions:", missingActions); // Debugging the missing actions  //TODO: We can not use same action twice, bug fix.
     throw new NotFoundError(
       `Actions not found for the following IDs: ${missingActions.join(", ")}`
     );
   }
 
-  console.log(actionExists);
-
   const zapId = await prismaClient.$transaction(async (tx) => {
     const zap = await prismaClient.zap.create({
       data: {
+        zapName,
         userId,
         availableTriggerId: "",
         actions: {

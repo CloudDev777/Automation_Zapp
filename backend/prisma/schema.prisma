@@ -27,8 +27,7 @@ model User {
   createdAt                   DateTime  @default(now())
   updatedAt                   DateTime  @updatedAt
   Token                       Token[]
-  zaps     Zap[]
-
+  zaps                        Zap[]
 }
 
 model Token {
@@ -44,13 +43,14 @@ model Token {
 }
 
 model Zap {
-  id        String   @id @default(uuid())
+  id                 String   @id @default(uuid())
+  zapName            String
   availableTriggerId String
-  userId    Int
-  trigger   Trigger?
-  actions   Action[]
-  zapRuns   ZapRun[]
-  user      User     @relation(fields: [userId], references: [id])
+  userId             Int
+  trigger            Trigger?
+  actions            Action[]
+  zapRuns            ZapRun[]
+  user               User     @relation(fields: [userId], references: [id])
 }
 
 model Trigger {

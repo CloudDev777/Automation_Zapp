@@ -44,6 +44,7 @@ model Token {
 
 model Zap {
   id                 String   @id @default(uuid())
+  zapName            String
   availableTriggerId String
   userId             Int
   trigger            Trigger?

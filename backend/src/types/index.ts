@@ -100,6 +100,12 @@ export const zapCreateSchema = z.object({
     .min(1, "availableTriggerId is required.")
     .uuid("availableTriggerId must be a valid UUID."),
   triggerMetadata: z.any().optional(),
+  zapName: z
+    .string({
+      required_error: "zapName is required.",
+      invalid_type_error: "zapName must be a string.",
+    })
+    .min(1, "zapName is required."),
   actions: z
     .array(
       z.object(
