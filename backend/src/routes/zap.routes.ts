@@ -17,7 +17,6 @@ import { validateZapInputMiddleware } from "../middlewares/validationMiddleware"
 router.route("/").post(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-  authorizePermissions("admin"),
   validateZapInputMiddleware,
   (req: Request, res: Response, next: NextFunction) => createZap(req, res)
 );
