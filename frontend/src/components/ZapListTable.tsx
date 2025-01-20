@@ -43,7 +43,7 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                         {zap.trigger.type.name} →{" "}
                         {zap.actions
                           .map((action) => action.type.name)
-                          .join(" → ")}
+                          .join(" → ")} {/*TODO: Add icons instead of names */}
                       </div>
                     </div>
                   </div>
