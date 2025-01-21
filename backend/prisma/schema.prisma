@@ -51,6 +51,7 @@ model Zap {
   actions            Action[]
   zapRuns            ZapRun[]
   user               User     @relation(fields: [userId], references: [id])
+  createdAt          DateTime @default(now())
 }
 
 model Trigger {
@@ -61,7 +62,7 @@ model Trigger {
   type      AvailableTrigger @relation(fields: [triggerId], references: [id])
   zap       Zap              @relation(fields: [zapId], references: [id])
 }
-
+  
 model Action {
   id           String          @id @default(uuid())
   zapId        String

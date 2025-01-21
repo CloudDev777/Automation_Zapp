@@ -89,6 +89,9 @@ export const getAllZaps = async (req: Request, res: Response) => {
     where: {
       userId: req.user?.userId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       actions: {
         include: {
