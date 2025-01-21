@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,7 +14,7 @@ model User {
   password                    String
   role                        String    @default("user")
   verificationToken           String?
-  isVerified                  Boolean   @default(true) //make it false if using email verification
+  isVerified                  Boolean   @default(true)
   verified                    DateTime?
   passwordToken               String?
   passwordTokenExpirationDate DateTime?
@@ -52,6 +46,7 @@ model Zap {
   zapRuns            ZapRun[]
   user               User     @relation(fields: [userId], references: [id])
   createdAt          DateTime @default(now())
+  isActive           Boolean  @default(true)
 }
 
 model Trigger {
@@ -60,13 +55,13 @@ model Trigger {
   triggerId String
   metadata  Json             @default("{}")
   type      AvailableTrigger @relation(fields: [triggerId], references: [id])
-  zap       Zap              @relation(fields: [zapId], references: [id])
+  zap       Zap              @relation(fields: [zapId], references: [id], onDelete: Cascade)
 }
-  
+
 model Action {
   id           String          @id @default(uuid())
   zapId        String
-  zap          Zap             @relation(fields: [zapId], references: [id])
+  zap          Zap             @relation(fields: [zapId], references: [id], onDelete: Cascade)
   actionId     String
   metadata     Json            @default("{}")
   type         AvailableAction @relation(fields: [actionId], references: [id])
@@ -91,12 +86,12 @@ model ZapRun {
   id           String        @id @default(uuid())
   zapId        String
   metadata     Json
-  zap          Zap           @relation(fields: [zapId], references: [id])
+  zap          Zap           @relation(fields: [zapId], references: [id], onDelete: Cascade)
   zapRunOutbox ZapRunOutbox?
 }
 
 model ZapRunOutbox {
   id       String @id @default(uuid())
   zapRunId String @unique
-  zapRun   ZapRun @relation(fields: [zapRunId], references: [id])
+  zapRun   ZapRun @relation(fields: [zapRunId], references: [id], onDelete: Cascade)
 }
