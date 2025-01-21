@@ -1,13 +1,12 @@
 import { Zap as ZapType } from "@/lib/types";
 import { Zap } from "lucide-react";
+import ZapDeleteButton from "./ZapDeleteButton";
 
 const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
   return (
     <div className="bg-white rounded-lg border border-neutral-200/20 overflow-hidden">
       <div className="p-6 border-b border-neutral-200/20">
-        <h2 className="text-lg font-semibold text-gray-800">
-          Recent Workflows
-        </h2>
+        <h2 className="text-lg font-semibold text-gray-800">Recent Zaps</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
@@ -43,7 +42,8 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                         {zap.trigger.type.name} →{" "}
                         {zap.actions
                           .map((action) => action.type.name)
-                          .join(" → ")} {/*TODO: Add icons instead of names */}
+                          .join(" → ")}{" "}
+                        {/*TODO: Add icons instead of names */}
                       </div>
                     </div>
                   </div>
@@ -60,9 +60,7 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                   <button className="text-indigo-600 hover:text-indigo-900 mr-3">
                     Edit
                   </button>
-                  <button className="text-red-600 hover:text-red-900">
-                    Delete
-                  </button>
+                  <ZapDeleteButton zapId={zap.id} />
                 </td>
               </tr>
             ))}

@@ -4,6 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import useZapCreationStore from "@/store/zapStore";
 import customFetch from "@/utils/fetch";
+import toast from "react-hot-toast";
+import { useWorkflowStore } from "@/store/workflowStore";
 
 // You'll need to create this type based on your API response
 type PublishResponse = {
@@ -20,7 +22,8 @@ const PublishModal = ({
 }) => {
   const [zapName, setLocalZapName] = useState("");
   const [error, setError] = useState("");
-  const { setZapName, zapData } = useZapCreationStore();
+  const { setZapName, zapData, resetZap } = useZapCreationStore();
+  const { resetWorkflow } = useWorkflowStore();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
@@ -32,8 +35,12 @@ const PublishModal = ({
       return response.data;
     },
     onSuccess: () => {
+      resetZap();
       navigate("/dashboard/zaps");
       queryClient.invalidateQueries({ queryKey: ["zaps"] });
+      toast.success("Zap published successfully");
+      resetWorkflow();
+      console.log(zapData);
     },
     onError: (error) => {
       setError(error.message);

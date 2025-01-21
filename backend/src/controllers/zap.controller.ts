@@ -134,3 +134,16 @@ export const getSingleZap = async (req: Request, res: Response) => {
 
   res.status(StatusCodes.OK).json({ zap });
 };
+
+export const deleteZap = async (req: Request, res: Response) => {
+  const { zapId } = req.params;
+
+  await prismaClient.zap.delete({
+    where: {
+      id: zapId,
+      userId: req.user?.userId,
+    },
+  });
+
+  res.status(StatusCodes.OK).json({ msg: "Zap deleted successfully!" });
+};

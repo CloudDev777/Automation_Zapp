@@ -21,6 +21,7 @@ import { GlobalLayout, DashboardLayout, ZapsLayout } from "./layouts";
 // Action imports
 import { action as signInAction } from "./pages/SignInPage";
 import { action as signUpAction } from "./pages/SignUpPage";
+import { action as deletedZapAction } from "./components/ZapDeleteButton";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
@@ -84,6 +85,11 @@ const router = createBrowserRouter([
             path: "create",
             element: <CreateZapPage />,
             loader: createZapsLoader(queryClient),
+          },
+          {
+            path: "delete-zap/:id",
+            element: <CreateZapPage />,
+            loader: deletedZapAction(queryClient),
           },
         ],
       },

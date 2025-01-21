@@ -23,6 +23,7 @@ type WorkflowStore = {
   ) => void;
   openModal: (blockId?: string) => void;
   closeModal: () => void;
+  resetWorkflow: () => void;
 };
 
 export const useWorkflowStore = create<WorkflowStore>((set) => ({
@@ -47,4 +48,9 @@ export const useWorkflowStore = create<WorkflowStore>((set) => ({
     })),
   openModal: (blockId) => set({ modalState: { isOpen: true, blockId } }),
   closeModal: () => set({ modalState: { isOpen: false, blockId: undefined } }),
+  resetWorkflow: () =>
+    set({
+      blocks: [],
+      modalState: { isOpen: false, blockId: undefined },
+    }),
 }));

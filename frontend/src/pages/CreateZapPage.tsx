@@ -5,6 +5,7 @@ import useZapCreationStore from "@/store/zapStore";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
+
 import { redirect } from "react-router-dom";
 
 export const loader = (queryClient: QueryClient) => async () => {
@@ -106,6 +107,7 @@ const ConfigModal = () => {
       }
     }
     closeModal();
+
   };
   const getItemName = (id: string) => {
     if (currentBlock?.type === "trigger") {
