@@ -1,9 +1,9 @@
 import { Zap as ZapType } from "@/lib/types";
 import { Loader, Zap } from "lucide-react";
-import ZapDeleteButton from "./ZapDeleteButton";
 import { useNavigation } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import DeleteZapModal from "./DeleteZapModal";
 
 const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
   dayjs.extend(relativeTime);
@@ -28,7 +28,7 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Name
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="hidden md:block px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Status
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -42,6 +42,7 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                     <tbody className="bg-white divide-y divide-neutral-200/20">
                       {zaps.map((zap) => {
                         const createdFromNow = dayjs(zap.createdAt).fromNow();
+                        console.log(zap);
                         return (
                           <tr key={zap.id}>
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -63,8 +64,8 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            <td className="px-6 py-4 whitespace-nowrap hidden md:block">
+                              <span className="px-2 inline-flex text-xs leading-5 mt-3 font-semibold rounded-full bg-green-100 text-green-800">
                                 {zap.isActive ? "Active" : "Inactive"}
                               </span>
                             </td>
@@ -73,10 +74,8 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                               {createdFromNow}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                              <button className="text-purple-600 mr-3">
-                                Edit
-                              </button>
-                              <ZapDeleteButton zapId={zap.id} />
+                              {/* //TODO: Add START button */}
+                              <DeleteZapModal zapId={zap.id} />
                             </td>
                           </tr>
                         );
