@@ -1,11 +1,10 @@
 import { ZapPublishButton } from "@/components";
 import { availableActionsQuery, availableTriggersQuery } from "@/lib/queries";
 import { useWorkflowStore } from "@/store/workflowStore";
-import useZapCreationStore from "@/store/zapStore";
+import { useZapCreationStore } from "@/store/zapStore";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
-
 import { redirect } from "react-router-dom";
 
 export const loader = (queryClient: QueryClient) => async () => {
@@ -26,17 +25,21 @@ const BlockComponent = ({
   id,
   index,
   type,
+  name,
 }: {
   id: string;
   type: "trigger" | "action";
   index?: number;
+  name?: string;
 }) => {
   const openModal = useWorkflowStore((state) => state.openModal);
+  const zapData = useZapCreationStore((state) => state.zapData);
 
   const blockStyles =
     type === "trigger"
       ? "bg-blue-100 border-2 border-blue-200 text-blue-700"
       : "bg-green-100 border-2 border-green-200 text-green-700";
+  index = index! + 1;
 
   return (
     <div
@@ -45,8 +48,11 @@ const BlockComponent = ({
     >
       <div className="flex items-center justify-between">
         <h3 className="font-semibold capitalize">
-          {type === "trigger" ? "Trigger" : `${index}. Action`}
+          {type === "trigger"
+            ? `${index}. ${zapData.triggerName || "Trigger"}`
+            : `${index}. ${name || "Action"}`}
         </h3>
+
         <button
           className={`${
             type === "trigger"
@@ -76,7 +82,8 @@ const ConfigModal = () => {
   const [selectedId, setSelectedId] = React.useState("");
   const [metadata, setMetadata] = React.useState("");
 
-  const { setTriggerId, addAction } = useZapCreationStore();
+  const { setTriggerId, addAction, setTriggerName, zapData } =
+    useZapCreationStore();
 
   React.useEffect(() => {
     if (currentBlock) {
@@ -95,6 +102,7 @@ const ConfigModal = () => {
       // If it's a trigger, update triggerId
       if (currentBlock?.type === "trigger") {
         setTriggerId(selectedId);
+        setTriggerName(getItemName(selectedId));
       } else {
         // If it's an action, find its index and update/add accordingly
         const actionIndex = blocks
@@ -102,12 +110,11 @@ const ConfigModal = () => {
           .findIndex((block) => block.id === modalState.blockId);
 
         if (actionIndex !== -1) {
-          addAction(selectedId, metadata);
+          addAction(selectedId, metadata, getItemName(selectedId));
         }
       }
     }
     closeModal();
-
   };
   const getItemName = (id: string) => {
     if (currentBlock?.type === "trigger") {
@@ -120,7 +127,7 @@ const ConfigModal = () => {
       actionsData?.availableActions.find((a: any) => a.id === id)?.name || ""
     );
   };
-
+  console.log(zapData); //here
   return modalState.isOpen ? (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-lg p-6 w-96 mx-4">
@@ -222,7 +229,8 @@ const AddBlockButton = ({ onClick }: { onClick: () => void }) => (
 
 const CreateZapPage = () => {
   const { blocks, addBlock } = useWorkflowStore();
-
+  const { zapData } = useZapCreationStore();
+  console.log(zapData);
   return (
     <>
       <ZapPublishButton
@@ -238,14 +246,24 @@ const CreateZapPage = () => {
         }}
       >
         <div className="p-8 space-y-6">
-          {blocks.map((block, index) => (
-            <React.Fragment key={block.id}>
-              <BlockComponent index={index} id={block.id} type={block.type} />
-              {/* {index < blocks.length - 1 && (
+          {blocks.map((block, index) => {
+            const action = zapData.actions.find(
+              (action) => action.availableActionId === block.selectedId
+            );
+            return (
+              <React.Fragment key={block.id}>
+                <BlockComponent
+                  index={index}
+                  name={action?.actionName}
+                  id={block.id}
+                  type={block.type}
+                />
+                {/* {index < blocks.length - 1 && (
               <AddBlockButton onClick={() => addBlock("action")} />
             )} */}
-            </React.Fragment>
-          ))}
+              </React.Fragment>
+            );
+          })}
 
           {blocks.length === 0 ? (
             <AddBlockButton onClick={() => addBlock("trigger")} />

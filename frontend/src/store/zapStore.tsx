@@ -3,12 +3,14 @@ import { create } from "zustand";
 // Types for our Zap structure
 type Action = {
   availableActionId: string;
+  actionName?: string;
   actionMetadata?: any; // You might want to type this more specifically
 };
 
 type ZapData = {
   zapName: string;
   availableTriggerId: string;
+  triggerName?: string;
   actions: Action[];
 };
 
@@ -19,8 +21,9 @@ interface ZapCreationStore {
 
   // Actions
   setZapName: (name: string) => void;
+  setTriggerName: (triggerName: string) => void;
   setTriggerId: (id: string) => void;
-  addAction: (actionId: string, metaData: any) => void;
+  addAction: (actionId: string, metaData: any, actionName?: string) => void;
   removeAction: (index: number) => void;
   updateActionMetadata: (index: number, metadata: any) => void;
   resetZap: () => void;
@@ -29,6 +32,7 @@ interface ZapCreationStore {
 // Initial state
 const initialState: ZapData = {
   zapName: "",
+  triggerName: "",
   availableTriggerId: "",
   actions: [],
 };
@@ -43,19 +47,28 @@ export const useZapCreationStore = create<ZapCreationStore>((set) => ({
     set((state) => ({
       zapData: { ...state.zapData, zapName: name },
     })),
+    
+  setTriggerName: (triggerName) =>
+    set((state) => ({
+      zapData: { ...state.zapData, triggerName },
+    })),
 
   setTriggerId: (id) =>
     set((state) => ({
       zapData: { ...state.zapData, availableTriggerId: id },
     })),
 
-  addAction: (actionId, metaData) =>
+  addAction: (actionId, metaData, actionName) =>
     set((state) => ({
       zapData: {
         ...state.zapData,
         actions: [
           ...state.zapData.actions,
-          { availableActionId: actionId, actionMetadata: metaData },
+          {
+            availableActionId: actionId,
+            actionMetadata: metaData,
+            actionName,
+          },
         ],
       },
     })),
@@ -85,9 +98,3 @@ export const useZapCreationStore = create<ZapCreationStore>((set) => ({
 }));
 
 export default useZapCreationStore;
-
-// Example selectors for common operations
-export const selectZapName = (state: ZapCreationStore) => state.zapData.zapName;
-export const selectTriggerId = (state: ZapCreationStore) =>
-  state.zapData.availableTriggerId;
-export const selectActions = (state: ZapCreationStore) => state.zapData.actions;
