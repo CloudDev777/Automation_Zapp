@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
+  dayjs.extend(relativeTime);
   const navigation = useNavigation();
   const isPageLoading = navigation.state === "loading";
   return (
@@ -40,9 +41,7 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                     </thead>
                     <tbody className="bg-white divide-y divide-neutral-200/20">
                       {zaps.map((zap) => {
-                        dayjs.extend(relativeTime);
                         const createdFromNow = dayjs(zap.createdAt).fromNow();
-                        console.log(createdFromNow);
                         return (
                           <tr key={zap.id}>
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -74,7 +73,7 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                               {createdFromNow}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                              <button className="text-indigo-600 hover:text-indigo-900 mr-3">
+                              <button className="text-purple-600 mr-3">
                                 Edit
                               </button>
                               <ZapDeleteButton zapId={zap.id} />
