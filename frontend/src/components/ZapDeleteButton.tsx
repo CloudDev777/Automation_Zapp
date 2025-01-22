@@ -1,6 +1,5 @@
 import customFetch from "@/utils/fetch";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LoaderIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -37,11 +36,11 @@ const ZapDeleteButton = ({ zapId }: { zapId: string }) => {
       onClick={() => !isPending && mutate()}
       disabled={isPending}
       type="button"
-      className={`text-red-600 ${
+      className={` lg:w-auto flex btn items-center ml-3 py-3  transition-colors bg-red-500  hover:bg-red-700 text-white lg:text-white-700  ${
         isPending ? "opacity-50 cursor-not-allowed" : ""
       }`}
     >
-      {isPending ? <LoaderIcon /> : "Delete"}
+      {isPending ? "Deleting..." : "Delete"}
     </button>
   );
 };
