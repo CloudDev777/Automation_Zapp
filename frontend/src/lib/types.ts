@@ -1,10 +1,9 @@
-import { D } from "node_modules/@tanstack/react-query-devtools/build/modern/ReactQueryDevtools-Cn7cKi7o";
-
 type Type = {
   id: String;
   name: String;
   image: String;
 };
+
 type ZapAction = {
   id: string; // UUID
   zapId: string; // UUID
