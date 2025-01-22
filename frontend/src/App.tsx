@@ -86,11 +86,6 @@ const router = createBrowserRouter([
             element: <CreateZapPage />,
             loader: createZapsLoader(queryClient),
           },
-          {
-            path: "delete-zap/:id",
-            element: <CreateZapPage />,
-            loader: deletedZapAction(queryClient),
-          },
         ],
       },
       {
