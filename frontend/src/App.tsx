@@ -21,7 +21,6 @@ import { GlobalLayout, DashboardLayout, ZapsLayout } from "./layouts";
 // Action imports
 import { action as signInAction } from "./pages/SignInPage";
 import { action as signUpAction } from "./pages/SignUpPage";
-import { action as deletedZapAction } from "./components/ZapDeleteButton";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
@@ -29,7 +28,8 @@ import { loader as zapsLoader } from "./pages/ZapsPage";
 import { loader as createZapsLoader } from "./pages/CreateZapPage";
 
 // Components imports
-import { Error } from "./components";
+import { Error, Loading } from "./components";
+import { Suspense } from "react";
 
 // Query Client Instance
 const queryClient = new QueryClient({
@@ -103,7 +103,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <Suspense fallback={<Loading />}>
+        <RouterProvider router={router} />
+      </Suspense>
       <ReactQueryDevtools position="bottom" initialIsOpen={false} />
     </QueryClientProvider>
   );
