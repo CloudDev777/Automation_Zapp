@@ -40,7 +40,6 @@ const PublishModal = ({
       queryClient.invalidateQueries({ queryKey: ["zaps"] });
       toast.success("Zap published successfully");
       resetWorkflow();
-      console.log(zapData);
     },
     onError: (error) => {
       setError(error.message);
