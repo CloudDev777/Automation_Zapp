@@ -82,8 +82,7 @@ const ConfigModal = () => {
   const [selectedId, setSelectedId] = React.useState("");
   const [metadata, setMetadata] = React.useState("");
 
-  const { setTriggerId, addAction, setTriggerName, zapData } =
-    useZapCreationStore();
+  const { setTriggerId, addAction, setTriggerName } = useZapCreationStore();
 
   React.useEffect(() => {
     if (currentBlock) {
@@ -127,7 +126,6 @@ const ConfigModal = () => {
       actionsData?.availableActions.find((a: any) => a.id === id)?.name || ""
     );
   };
-  console.log(zapData); //here
   return modalState.isOpen ? (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white rounded-lg p-6 w-96 mx-4">
@@ -230,7 +228,6 @@ const AddBlockButton = ({ onClick }: { onClick: () => void }) => (
 const CreateZapPage = () => {
   const { blocks, addBlock } = useWorkflowStore();
   const { zapData } = useZapCreationStore();
-  console.log(zapData);
   return (
     <>
       <ZapPublishButton

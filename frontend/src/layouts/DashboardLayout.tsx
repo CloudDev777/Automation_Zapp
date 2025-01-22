@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { userQuery } from "@/lib/queries";
-import { Loading, MobileAppHeader, MobileSidebar, SideBar } from "@/components";
+import { MobileAppHeader, MobileSidebar, SideBar } from "@/components";
 import { ZapLayoutSkeleton } from "@/components/LoadingSkeletons";
 
 export const loader = (queryClient: QueryClient) => async () => {

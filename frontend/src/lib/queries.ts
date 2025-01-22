@@ -17,6 +17,16 @@ export const zapsQuery = {
   },
 };
 
+export const singleZapQuery = (id: string) => {
+  return {
+    queryKey: ["zaps", id],
+    queryFn: async () => {
+      const { data } = await customFetch.get(`/zaps/${id}`);
+      return data;
+    },
+  };
+};
+
 export const availableTriggersQuery = {
   queryKey: ["availableTriggers"],
   queryFn: async () => {
