@@ -1,3 +1,4 @@
+import useSidebarStore from "@/store/sidebarStore";
 import { QueryClient } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
 
