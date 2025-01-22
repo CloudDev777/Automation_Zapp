@@ -1,10 +1,10 @@
-type Type = {
+export type Type = {
   id: String;
   name: String;
   image: String;
 };
 
-type ZapAction = {
+export type ZapAction = {
   id: string; // UUID
   zapId: string; // UUID
   actionId: string; // UUID
