@@ -1,3 +1,5 @@
+import { D } from "node_modules/@tanstack/react-query-devtools/build/modern/ReactQueryDevtools-Cn7cKi7o";
+
 type Type = {
   id: String;
   name: String;
@@ -32,6 +34,8 @@ export type Zap = {
   availableTriggerId: string; // UUID
   userId: number;
   actions: ZapAction[];
+  isActive: Boolean;
   trigger: ZapTrigger;
+  createdAt: Date;
   zapRuns: ZapRun[]; // Define type or keep empty if unknown
 };
