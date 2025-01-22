@@ -114,7 +114,7 @@ export const getAllZaps = async (req: Request, res: Response) => {
 export const getSingleZap = async (req: Request, res: Response) => {
   const { zapId } = req.params;
 
-  const zap = await prismaClient.zap.findMany({
+  const zap = await prismaClient.zap.findFirst({
     where: {
       userId: req.user?.userId,
       id: zapId,
@@ -129,10 +129,6 @@ export const getSingleZap = async (req: Request, res: Response) => {
       zapRuns: true,
     },
   });
-
-  if (zap.length === 0) {
-    throw new NotFoundError(`Zap with id: ${zapId} does not exists!`);
-  }
 
   res.status(StatusCodes.OK).json({ zap });
 };
