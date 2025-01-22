@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import { LogOutIcon } from "lucide-react";
 
+
 const LogOutModal = () => {
   const { logoutUser } = useDashboardStore();
   const queryClient = useQueryClient();
@@ -21,7 +22,10 @@ const LogOutModal = () => {
         <LogOutIcon className="w-5 h-5 mr-3" />
         Logout
       </button>
-      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+      <dialog
+        id="my_modal_5"
+        className="modal modal-bottom sm:modal-middle z-index-999"
+      >
         <div className="modal-box">
           <h3 className="font-bold text-lg">Log Out</h3>
           <p className="py-4">
