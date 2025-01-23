@@ -2,7 +2,7 @@ import { Outlet, useNavigation } from "react-router-dom";
 
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";
-import { Bell, CreditCard, Lock, User } from "lucide-react";
+import { Bell, CreditCard, Lock, LockKeyhole, User } from "lucide-react";
 import {
   SettingsLayoutSkeletonMain,
   SettingsLayoutSkeletonNavbar,
@@ -28,6 +28,11 @@ const links = [
     to: "notifications",
     label: "Notifications",
     icon: Bell,
+  },
+  {
+    to: "password",
+    label: "Change Password",
+    icon: LockKeyhole,
   },
 ];
 
@@ -76,7 +81,7 @@ const SettingsNav = () => {
         <NavLink
           key={to}
           to={to}
-          end={to === "/dashboard/profile/"}
+          end={to === "/dashboard/settings"}
           className={({ isActive }) =>
             clsx(
               "flex items-center px-4 py-2 rounded-lg group transition-colors",

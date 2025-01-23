@@ -9,7 +9,7 @@ const SideBarUserProfile = () => {
   return (
     <div className="p-3 lg:p-6 flex items-center ">
       <img
-        src="/avatar.png"
+        src={user.image || "/avatar.png"}
         alt="User"
         className="w-8 h-8 rounded-full transition-opacity duration-300 opacity-100"
         loading="lazy"

@@ -42,7 +42,6 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
                     <tbody className="bg-white divide-y divide-neutral-200/20">
                       {zaps.map((zap) => {
                         const createdFromNow = dayjs(zap.createdAt).fromNow();
-                        console.log(zap);
                         return (
                           <tr key={zap.id}>
                             <td className="px-6 py-4 whitespace-nowrap">

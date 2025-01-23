@@ -22,6 +22,8 @@ model User {
   updatedAt                   DateTime  @updatedAt
   Token                       Token[]
   zaps                        Zap[]
+  image                       String?
+  company                     String?
 }
 
 model Token {
