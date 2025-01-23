@@ -26,6 +26,7 @@ import {
 // Action imports
 import { action as signInAction } from "./pages/SignInPage";
 import { action as signUpAction } from "./pages/SignUpPage";
+import { action as profileAction } from "./pages/ProfilePage";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
@@ -33,7 +34,7 @@ import { loader as zapsLoader } from "./pages/ZapsPage";
 import { loader as createZapsLoader } from "./pages/CreateZapPage";
 
 // Components imports
-import { Error, Loading } from "./components";
+import { ChangePassword, Error, Loading } from "./components";
 import { Suspense } from "react";
 
 // Query Client Instance
@@ -104,6 +105,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <ProfilePage />,
+            action: profileAction(queryClient),
           },
           {
             path: "security",
@@ -114,8 +116,12 @@ const router = createBrowserRouter([
             element: <h1>Billing Page, coming soon.</h1>,
           },
           {
-            path: "Notifications",
+            path: "notifications",
             element: <h1>Notifications Page, coming soon.</h1>,
+          },
+          {
+            path: "password",
+            element: <ChangePassword />,
           },
         ],
       },
