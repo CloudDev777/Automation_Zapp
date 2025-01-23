@@ -6,6 +6,8 @@ export interface TokenUser {
   userId: number;
   role: string;
   email: string;
+  image?: string | null;
+  company?: string | null;
 }
 
 // Updated Zod schemas for each validation set
@@ -39,6 +41,8 @@ export type LoginInput = z.infer<typeof validateLoginInput>;
 
 export const validateUpdateUserInput = z.object({
   name: z.string({ required_error: "name is required" }),
+  image: z.any().optional(),
+  company: z.optional(z.string()),
   email: z
     .string({ required_error: "email is required" })
     .email({ message: "invalid email format" })
