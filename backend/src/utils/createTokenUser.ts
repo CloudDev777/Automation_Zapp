@@ -7,5 +7,7 @@ export const createTokenUser = (user: User): TokenUser => {
     userId: user.id,
     role: user.role,
     email: user.email,
+    image: user?.image,
+    company: user?.company,
   };
 };
