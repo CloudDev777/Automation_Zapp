@@ -7,6 +7,7 @@ import {
 } from "../controllers/user.controller";
 
 const router = Router();
+import imageUploadMiddleware from "../middlewares/multerMiddleware";
 
 import {
   validateUpdateUserInputMiddleware,
@@ -22,7 +23,9 @@ router.route("/current-user").get(
 router.route("/updateUser").patch(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
+  imageUploadMiddleware.single("image"),
   validateUpdateUserInputMiddleware,
+
   (req: Request, res: Response, next: NextFunction) => updateUser(req, res)
 );
 router.route("/updateUserPassword").patch(
