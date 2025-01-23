@@ -46,6 +46,22 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 // );
 app.use(helmet());
 app.use(cors());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     useDefaults: true,
+//     directives: {
+//       "img-src": [
+//         "'self'",
+//         "data:",
+//         "https://meeruzairwashere-portfolio.onrender.com/",
+//         "https://firebasestorage.googleapis.com/",
+//         "https://res.cloudinary.com/",
+//         "https://www.google-analytics.com",
+//       ],
+//     },
+//     reportOnly: false,
+//   })
+// );
 
 // Routes
 app.use("/api/v1/auth", authRouter);
