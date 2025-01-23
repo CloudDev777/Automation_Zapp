@@ -70,3 +70,71 @@ export const ZapLayoutSkeleton = () => {
     </div>
   );
 };
+
+export const SettingsLayoutSkeletonMain = () => {
+  return (
+    <div className="lg:col-span-2">
+      <div className="bg-white border border-neutral-200/20 rounded-lg p-6 space-y-6">
+        {/* <!-- Profile Section Skeleton --> */}
+        <div className="flex items-center mb-6 space-x-4">
+          <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
+          <div>
+            <div className="h-8 w-32 bg-gray-300 rounded"></div>
+            <div className="h-4 w-24 bg-gray-300 rounded mt-2"></div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6">
+          <div>
+            <div className="h-4 w-28 bg-gray-300 rounded mb-2"></div>
+            <div className="h-10 bg-gray-300 rounded"></div>
+          </div>
+          <div>
+            <div className="h-4 w-36 bg-gray-300 rounded mb-2"></div>
+            <div className="h-10 bg-gray-300 rounded"></div>
+          </div>
+          <div>
+            <div className="h-4 w-32 bg-gray-300 rounded mb-2"></div>
+            <div className="h-10 bg-gray-300 rounded"></div>
+          </div>
+          <div>
+            <div className="h-4 w-40 bg-gray-300 rounded mb-2"></div>
+            <div className="h-10 bg-gray-300 rounded"></div>
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-center justify-end space-x-4">
+          <div className="h-10 w-24 bg-gray-300 rounded"></div>
+          <div className="h-10 w-32 bg-gray-300 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const SettingsLayoutSkeletonNavbar = () => {
+  return (
+    <div className="lg:col-span-1">
+      <div className="bg-white border border-neutral-200/20 rounded-lg p-4">
+        <div className="space-y-3">
+          <div className="flex items-center px-4 py-2 rounded-lg bg-gray-200">
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-3"></div>
+            <div className="h-4 w-24 bg-gray-300 rounded"></div>
+          </div>
+          <div className="flex items-center px-4 py-2 rounded-lg bg-gray-200">
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-3"></div>
+            <div className="h-4 w-28 bg-gray-300 rounded"></div>
+          </div>
+          <div className="flex items-center px-4 py-2 rounded-lg bg-gray-200">
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-3"></div>
+            <div className="h-4 w-20 bg-gray-300 rounded"></div>
+          </div>
+          <div className="flex items-center px-4 py-2 rounded-lg bg-gray-200">
+            <div className="w-5 h-5 bg-gray-300 rounded-full mr-3"></div>
+            <div className="h-4 w-32 bg-gray-300 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
