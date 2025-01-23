@@ -16,7 +16,12 @@ import {
 } from "./pages";
 
 // Layouts imports
-import { GlobalLayout, DashboardLayout, ZapsLayout } from "./layouts";
+import {
+  GlobalLayout,
+  DashboardLayout,
+  ZapsLayout,
+  SettingsLayout,
+} from "./layouts";
 
 // Action imports
 import { action as signInAction } from "./pages/SignInPage";
@@ -93,8 +98,26 @@ const router = createBrowserRouter([
         element: <HistoryPage />,
       },
       {
-        path: "profile",
-        element: <ProfilePage />,
+        path: "settings",
+        element: <SettingsLayout />,
+        children: [
+          {
+            index: true,
+            element: <ProfilePage />,
+          },
+          {
+            path: "security",
+            element: <h1>Settings Page, coming soon.</h1>,
+          },
+          {
+            path: "billing",
+            element: <h1>Billing Page, coming soon.</h1>,
+          },
+          {
+            path: "Notifications",
+            element: <h1>Notifications Page, coming soon.</h1>,
+          },
+        ],
       },
     ],
   },
