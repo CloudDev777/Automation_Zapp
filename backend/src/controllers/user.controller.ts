@@ -10,6 +10,7 @@ import {
 
 import { prismaClient } from "../db";
 import { TokenUser, UpdatePasswordInput, UpdateUserInput } from "../types";
+import { uploadFileToFirebase } from "../middlewares/firebaseUploader";
 
 export const showCurrentUser = async (
   req: Request,
@@ -23,12 +24,17 @@ export const updateUser = async (
   req: Request<{}, {}, UpdateUserInput>,
   res: Response<{ user: TokenUser }>
 ) => {
-  const { email, name } = req.body;
+  // Check if files are included in the request
+  if (req.file) {
+    // Format and upload screenshot to Firebase
+    const fireBaseResponse = await uploadFileToFirebase(req.file);
 
+    req.body.image = fireBaseResponse.downloadURL;
+  }
   // Update the user with Prisma
   const user = await prismaClient.user.update({
     where: { id: Number(req.user?.userId) },
-    data: { email, name },
+    data: req.body,
   });
 
   const tokenUser = createTokenUser(user);
