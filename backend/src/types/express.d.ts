@@ -8,6 +8,8 @@ declare global {
         name: string;
         role: string;
         email: string;
+        image?: string | null;
+        company?: string | null;
       };
     }
   }
