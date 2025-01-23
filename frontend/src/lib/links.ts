@@ -1,4 +1,4 @@
-import { History, Menu, Zap } from "lucide-react";
+import { History, Menu, Settings, Zap } from "lucide-react";
 
 export const links = [
   {
@@ -15,5 +15,10 @@ export const links = [
     to: "history",
     label: "History",
     icon: History,
+  },
+  {
+    to: "settings",
+    label: "Settings",
+    icon: Settings,
   },
 ];
