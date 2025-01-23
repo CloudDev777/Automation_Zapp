@@ -4,7 +4,7 @@ import path from "path";
 
 const storage = multer.memoryStorage();
 
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 2 * 1024 * 1024 } });
 
 const parser = new DataParser();
 
