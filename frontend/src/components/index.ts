@@ -17,4 +17,4 @@ export { default as ZapListTable } from "./ZapListTable";
 export { default as ZapPublishButton } from "./ZapPublishButton";
 export { default as ZapDeleteButton } from "./ZapDeleteButton";
 export { default as Loading } from "./Loading";
-
+export { default as ChangePassword } from "./ChangePassword";
