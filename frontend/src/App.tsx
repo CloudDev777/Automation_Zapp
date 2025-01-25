@@ -27,6 +27,7 @@ import {
 import { action as signInAction } from "./pages/SignInPage";
 import { action as signUpAction } from "./pages/SignUpPage";
 import { action as profileAction } from "./pages/ProfilePage";
+import { action as changePasswordAction } from "./components/ChangePassword";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
@@ -71,7 +72,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout queryClient={queryClient} />,
+    element: <DashboardLayout />,
     loader: dashboardLoader(queryClient),
     children: [
       {
@@ -122,6 +123,7 @@ const router = createBrowserRouter([
           {
             path: "password",
             element: <ChangePassword />,
+            action: changePasswordAction(queryClient),
           },
         ],
       },
