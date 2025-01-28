@@ -1,7 +1,6 @@
 import { PageHeader, ZapListTable } from "@/components";
 
 const ZapsPage = () => {
-
   return (
     <>
       <PageHeader

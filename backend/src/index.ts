@@ -15,6 +15,7 @@ import userRouter from "./routes/user.routes";
 import zapRouter from "./routes/zap.routes";
 import triggerRouter from "./routes/trigger.routes";
 import actionRouter from "./routes/action.routes";
+import newsletterRouter from './routes/newsletter.routes';
 
 // Middleware
 import notFoundMiddleware from "./middlewares/not-found";
@@ -69,6 +70,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/zaps", zapRouter);
 app.use("/api/v1/triggers", triggerRouter);
 app.use("/api/v1/actions", actionRouter);
+app.use("/api/v1/newsletter", newsletterRouter);
 
 // Serve static files in production
 // Uncomment the below line if you have a frontend to serve in production

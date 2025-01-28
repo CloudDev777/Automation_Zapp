@@ -19,3 +19,5 @@ export { default as ZapDeleteButton } from "./ZapDeleteButton";
 export { default as Loading } from "./Loading";
 export { default as ChangePassword } from "./ChangePassword";
 export { default as DashboardCardsList } from "./DashboardCardsList";
+export { default as ComingSoon } from "./ComingSoon";
+export { default as NoZapFound } from "./NoZapFound";

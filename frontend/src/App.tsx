@@ -31,11 +31,10 @@ import { action as changePasswordAction } from "./components/ChangePassword";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
-import { loader as zapsListLoader } from "./components/ZapListTable";
 import { loader as createZapsLoader } from "./pages/CreateZapPage";
 
 // Components imports
-import { ChangePassword, Error, Loading } from "./components";
+import { ChangePassword, ComingSoon, Error, Loading } from "./components";
 import { Suspense } from "react";
 
 // Query Client Instance
@@ -82,7 +81,6 @@ const router = createBrowserRouter([
       {
         path: "zaps",
         element: <ZapsLayout />,
-        loader: zapsListLoader(queryClient),
         children: [
           {
             index: true,
@@ -110,15 +108,15 @@ const router = createBrowserRouter([
           },
           {
             path: "security",
-            element: <h1>Settings Page, coming soon.</h1>,
+            element: <ComingSoon />,
           },
           {
             path: "billing",
-            element: <h1>Billing Page, coming soon.</h1>,
+            element: <ComingSoon />,
           },
           {
             path: "notifications",
-            element: <h1>Notifications Page, coming soon.</h1>,
+            element: <ComingSoon />,
           },
           {
             path: "password",

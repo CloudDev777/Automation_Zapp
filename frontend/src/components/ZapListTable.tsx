@@ -6,6 +6,7 @@ import DeleteZapModal from "./DeleteZapModal";
 import { zapsQuery } from "@/lib/queries";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { redirect } from "react-router-dom";
+import NoZapFound from "./NoZapFound";
 
 export const loader = (queryClient: QueryClient) => async () => {
   try {
@@ -96,7 +97,7 @@ const ZapListTable = () => {
               </div>
             </>
           ) : (
-            "No zaps, create one!"
+            <NoZapFound />
           )}
         </>
       ) : (
@@ -125,7 +126,7 @@ const ZapListTable = () => {
               </thead>
               {/* Table Rows */}
               <tbody className="bg-white divide-y divide-neutral-200/20">
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: 7 }).map((_, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">

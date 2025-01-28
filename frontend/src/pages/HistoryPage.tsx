@@ -1,4 +1,6 @@
+import { ComingSoon } from "@/components";
+
 const HistoryPage = () => {
-  return <div>HistoryPage</div>;
+  return <ComingSoon />;
 };
 export default HistoryPage;

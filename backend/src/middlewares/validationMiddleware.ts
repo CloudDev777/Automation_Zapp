@@ -5,6 +5,7 @@ import {
   createAvailableActionSchema,
   validateForgotPasswordInput,
   validateLoginInput,
+  validateNewsletterInput,
   validateRegisterInput,
   validateResetPasswordInput,
   validateUpdatePasswordInput,
@@ -58,6 +59,9 @@ export const validateUpdatePasswordInputMiddleware = withValidationErrors(
 
 export const validateUpdateUserInputMiddleware = withValidationErrors(
   validateUpdateUserInput
+);
+export const validateNewsletterInputMiddleware = withValidationErrors(
+  validateNewsletterInput
 );
 
 export const validateLoginInputMiddleware =
