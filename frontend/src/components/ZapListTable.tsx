@@ -125,7 +125,7 @@ const ZapListTable = () => {
               </thead>
               {/* Table Rows */}
               <tbody className="bg-white divide-y divide-neutral-200/20">
-                {Array.from({ length: 5 }).map((_, index) => (
+                {Array.from({ length: 7 }).map((_, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
