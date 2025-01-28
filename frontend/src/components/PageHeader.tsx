@@ -4,9 +4,14 @@ interface Props {
   title: string;
   description: string;
   butttonText: string;
-  link?: boolean;
+  link?: string;
 }
-const PageHeader = ({ title, description, butttonText, link }: Props) => {
+const PageHeader = ({
+  title,
+  description,
+  butttonText,
+  link = "create",
+}: Props) => {
   return (
     <header className="bg-white border border-neutral-200/20 rounded-lg p-4 mb-6">
       <div className="flex justify-between items-center">
@@ -20,7 +25,7 @@ const PageHeader = ({ title, description, butttonText, link }: Props) => {
           </button> */}
           {link && (
             <Link
-              to="create"
+              to={link}
               className="border border-neutral-200/20 bg-primary hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-300"
             >
               {butttonText}

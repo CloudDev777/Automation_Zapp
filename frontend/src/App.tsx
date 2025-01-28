@@ -31,7 +31,7 @@ import { action as changePasswordAction } from "./components/ChangePassword";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
-import { loader as zapsLoader } from "./pages/ZapsPage";
+import { loader as zapsListLoader } from "./components/ZapListTable";
 import { loader as createZapsLoader } from "./pages/CreateZapPage";
 
 // Components imports
@@ -82,7 +82,7 @@ const router = createBrowserRouter([
       {
         path: "zaps",
         element: <ZapsLayout />,
-        loader: zapsLoader(queryClient),
+        loader: zapsListLoader(queryClient),
         children: [
           {
             index: true,
