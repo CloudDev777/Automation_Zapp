@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 import { prismaClient } from "../db";
 
 export interface TokenUser {
@@ -66,6 +66,13 @@ export const validateUpdatePasswordInput = z.object({
     .min(8, { message: "password must be at least 8 characters long" }),
 });
 export type UpdatePasswordInput = z.infer<typeof validateUpdatePasswordInput>;
+
+export const validateNewsletterInput = z.object({
+  email: z
+    .string({ required_error: "email is required" })
+    .email({ message: "invalid email format" }),
+});
+export type NewsletterInput = z.infer<typeof validateNewsletterInput>;
 
 export const validateVerifyEmailInput = z.object({
   verificationToken: z.string({
