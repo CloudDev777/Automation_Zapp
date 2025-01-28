@@ -1,19 +1,30 @@
 import { Zap as ZapType } from "@/lib/types";
-import { Loader, Zap } from "lucide-react";
-import { useNavigation } from "react-router-dom";
+import { Zap } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import DeleteZapModal from "./DeleteZapModal";
+import { zapsQuery } from "@/lib/queries";
+import { QueryClient, useQuery } from "@tanstack/react-query";
+import { redirect } from "react-router-dom";
 
-const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
+export const loader = (queryClient: QueryClient) => async () => {
+  try {
+    const { data } = await queryClient.ensureQueryData(zapsQuery);
+    return data;
+  } catch (error) {
+    return redirect("/");
+  }
+};
+
+const ZapListTable = () => {
+  const { data, isLoading } = useQuery(zapsQuery);
+  const zaps: ZapType[] = data?.zaps;
   dayjs.extend(relativeTime);
-  const navigation = useNavigation();
-  const isPageLoading = navigation.state === "loading";
   return (
     <>
-      {!isPageLoading ? (
+      {!isLoading ? (
         <>
-          {zaps.length > 0 ? (
+          {zaps?.length > 0 ? (
             <>
               <div className="bg-white rounded-lg border border-neutral-200/20 overflow-hidden">
                 <div className="p-6 border-b border-neutral-200/20">
@@ -89,7 +100,60 @@ const ZapListTable = ({ zaps }: { zaps: ZapType[] }) => {
           )}
         </>
       ) : (
-        <Loader />
+        <div className="bg-white rounded-lg border border-neutral-200/20 overflow-hidden">
+          {/* Table Header */}
+          <div className="p-6 border-b border-neutral-200/20">
+            <div className="h-6 bg-gray-200 rounded w-32"></div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="px-6 py-3 text-left">
+                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  </th>
+                  <th className="px-6 py-3 text-left">
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </th>
+                  <th className="px-6 py-3 text-left">
+                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  </th>
+                  <th className="px-6 py-3 text-left">
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </th>
+                </tr>
+              </thead>
+              {/* Table Rows */}
+              <tbody className="bg-white divide-y divide-neutral-200/20">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full"></div>
+                        <div className="ml-4">
+                          <div className="h-4 bg-gray-200 rounded w-36 mb-1"></div>
+                          <div className="h-3 bg-gray-200 rounded w-24"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="h-4 bg-gray-200 rounded w-16"></div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex gap-3">
+                        <div className="h-6 bg-gray-200 rounded w-12"></div>
+                        <div className="h-6 bg-gray-200 rounded w-12"></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       )}
     </>
   );
