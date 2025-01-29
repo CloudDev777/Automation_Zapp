@@ -10,6 +10,7 @@ import {
   createAvailableTrigger,
   deleteAvailableTrigger,
   getAvailableTrigger,
+  updateAvailableTrigger,
 } from "../controllers/trigger.controller";
 import { validateAvailableActionInputMiddleware } from "../middlewares/validationMiddleware";
 import imageUploadMiddleware from "../middlewares/multerMiddleware";
@@ -32,13 +33,25 @@ router
       createAvailableTrigger(req, res)
   );
 
-router.route("/:id").delete(
-  (req: Request, res: Response, next: NextFunction) =>
-    authenticateUser(req, res, next),
-  authorizePermissions("admin"),
-  async (req: Request<{ id: string }>, res: Response) => {
-    await deleteAvailableTrigger(req, res);
-  }
-);
+router
+  .route("/:id")
+  .delete(
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticateUser(req, res, next),
+    authorizePermissions("admin"),
+    async (req: Request<{ id: string }>, res: Response) => {
+      await deleteAvailableTrigger(req, res);
+    }
+  )
+  .patch(
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticateUser(req, res, next),
+    authorizePermissions("admin"),
+    imageUploadMiddleware.single("image"),
+    validateAvailableActionInputMiddleware,
+    async (req: Request<{ id: string }>, res: Response) => {
+      await updateAvailableTrigger(req, res);
+    }
+  );
 
 export default router;
