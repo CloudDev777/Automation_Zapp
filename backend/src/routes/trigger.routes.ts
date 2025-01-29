@@ -12,6 +12,7 @@ import {
   getAvailableTrigger,
 } from "../controllers/trigger.controller";
 import { validateAvailableActionInputMiddleware } from "../middlewares/validationMiddleware";
+import imageUploadMiddleware from "../middlewares/multerMiddleware";
 
 router
   .route("/")
@@ -25,6 +26,7 @@ router
     (req: Request, res: Response, next: NextFunction) =>
       authenticateUser(req, res, next),
     authorizePermissions("admin"),
+    imageUploadMiddleware.single("image"),
     validateAvailableActionInputMiddleware,
     (req: Request, res: Response, next: NextFunction) =>
       createAvailableTrigger(req, res)
