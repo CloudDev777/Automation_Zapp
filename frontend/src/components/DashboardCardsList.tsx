@@ -21,8 +21,8 @@ const DashboardCardsList = () => {
             <p className="text-sm text-gray-500">Total Executions</p>
             <h3 className="text-2xl font-bold text-gray-800">0</h3>
           </div>
-          <div className="p-3 bg-purple-100 rounded-full">
-            <CircleCheck className="text-purple-600 h-5 w-5" />
+          <div className="p-3 bg-green-100 rounded-full">
+            <CircleCheck className="text-green-600 h-5 w-5" />
           </div>
         </div>
       </div>
@@ -33,8 +33,8 @@ const DashboardCardsList = () => {
             <p className="text-sm text-gray-500">Connected Apps</p>
             <h3 className="text-2xl font-bold text-gray-800">0</h3>
           </div>
-          <div className="p-3 bg-purple-100 rounded-full">
-            <QrCode className="text-purple-600 h-5 w-5" />
+          <div className="p-3 bg-blue-100 rounded-full">
+            <QrCode className="text-blue-600 h-5 w-5" />
           </div>
         </div>
       </div>
