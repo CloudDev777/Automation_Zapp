@@ -35,6 +35,44 @@ export const getAvailableTrigger = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ availableTriggers });
 };
 
+export const updateAvailableTrigger = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  let { name, image } = req.body;
+  const exists = await prismaClient.availableTrigger.findFirst({
+    where: { id },
+  });
+
+  if (!exists) {
+    throw new NotFoundError(
+      `Available Trigger with id: ${id} does not exists!`
+    );
+  }
+
+  if (req.file) {
+    const res = await FirebaseImageHandler.updateImage({
+      oldImageUrl: image,
+      newImage: req.file,
+    });
+    // const res = await FirebaseImageHandler.uploadImage(req.file);  //TODO: remove this later
+    if (!res) {
+      throw new InternalServerError("Unable to update image.");
+    }
+    image = res.downloadURL;
+  }
+
+  const availableTrigger = await prismaClient.availableTrigger.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      image,
+    },
+  });
+
+  res.status(StatusCodes.OK).json({ availableTrigger });
+};
+
 export const deleteAvailableTrigger = async (req: Request, res: Response) => {
   const { id } = req.params;
 
