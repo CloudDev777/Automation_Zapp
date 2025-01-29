@@ -1,3 +1,4 @@
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -25,18 +26,16 @@ const errorHandlerMiddleware = (
     customError.statusCode = 400;
   }
 
-  // Handle duplicate key errors (MongoDB specific)
-  if (err.code && err.code === 11000) {
-    customError.msg = `Duplicate value entered for ${Object.keys(
-      err.keyValue
-    ).join(", ")} field, please choose another value`;
-    customError.statusCode = 400;
-  }
 
   // Handle cast errors (e.g., invalid ObjectId)
   if (err.name === "CastError") {
     customError.msg = `No item found with id: ${err.value}`;
     customError.statusCode = 404;
+  }
+
+  if (err instanceof PrismaClientKnownRequestError && err.code === "P2003") {
+    customError.msg = `Cannot delete ${err?.meta?.modelName} because it is referenced in another record.`;
+    customError.statusCode = 400;
   }
 
   // Send the error response
