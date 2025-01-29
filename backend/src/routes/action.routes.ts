@@ -10,6 +10,7 @@ import {
   createAvailableAction,
   deleteAvailableAction,
   getAvailableAction,
+  updateAvailableAction,
 } from "../controllers/action.controller";
 import { validateAvailableActionInputMiddleware } from "../middlewares/validationMiddleware";
 
@@ -31,13 +32,25 @@ router
       createAvailableAction(req, res)
   );
 
-router.route("/:id").delete(
-  (req: Request, res: Response, next: NextFunction) =>
-    authenticateUser(req, res, next),
-  authorizePermissions("admin"),
-  async (req: Request<{ id: string }>, res: Response) => {
-    await deleteAvailableAction(req, res);
-  }
-);
+router
+  .route("/:id")
+  .delete(
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticateUser(req, res, next),
+    authorizePermissions("admin"),
+    async (req: Request<{ id: string }>, res: Response) => {
+      await deleteAvailableAction(req, res);
+    }
+  )
+  .patch(
+    (req: Request, res: Response, next: NextFunction) =>
+      authenticateUser(req, res, next),
+    authorizePermissions("admin"),
+    imageUploadMiddleware.single("image"),
+    validateAvailableActionInputMiddleware,
+    async (req: Request<{ id: string }>, res: Response) => {
+      await updateAvailableAction(req, res);
+    }
+  );
 
 export default router;
