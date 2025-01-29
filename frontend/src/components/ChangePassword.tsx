@@ -53,7 +53,6 @@ export const action =
 
 const ChangePassword = () => {
   const actionData = useActionData();
-  console.log(actionData);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
