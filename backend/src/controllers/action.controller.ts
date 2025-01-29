@@ -36,6 +36,42 @@ export const getAvailableAction = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ availableActions });
 };
 
+export const updateAvailableAction = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  let { name, image } = req.body;
+  const exists = await prismaClient.availableAction.findFirst({
+    where: { id },
+  });
+
+  if (!exists) {
+    throw new NotFoundError(`Available Action with id: ${id} does not exists!`);
+  }
+
+  if (req.file) {
+    const res = await FirebaseImageHandler.updateImage({
+      oldImageUrl: image,
+      newImage: req.file,
+    });
+    // const res = await FirebaseImageHandler.uploadImage(req.file); //TODO: remove this later
+    if (!res) {
+      throw new InternalServerError("Unable to update image.");
+    }
+    image = res.downloadURL;
+  }
+
+  const availableActions = await prismaClient.availableAction.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      image,
+    },
+  });
+
+  res.status(StatusCodes.OK).json({ availableActions });
+};
+
 export const deleteAvailableAction = async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -49,13 +85,12 @@ export const deleteAvailableAction = async (req: Request, res: Response) => {
 
   await FirebaseImageHandler.deleteImage(exists?.image!);
 
-  const availableAction = await prismaClient.availableAction.delete({
+  await prismaClient.availableAction.delete({
     where: {
       id,
     },
   });
 
-  console.log(availableAction);
   res
     .status(StatusCodes.OK)
     .json({ msg: `Available Action with id: ${id} is deleted successfully!` });
