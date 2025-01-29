@@ -30,8 +30,6 @@ export const createAvailableAction = async (
   res.status(StatusCodes.OK).json({ action });
 };
 
-
-
 export const getAvailableAction = async (req: Request, res: Response) => {
   const availableActions = await prismaClient.availableAction.findMany({});
 
@@ -48,6 +46,8 @@ export const deleteAvailableAction = async (req: Request, res: Response) => {
   if (!exists) {
     throw new NotFoundError(`Available Action with id: ${id} does not exists!`);
   }
+
+  await FirebaseImageHandler.deleteImage(exists?.image!);
 
   const availableAction = await prismaClient.availableAction.delete({
     where: {
