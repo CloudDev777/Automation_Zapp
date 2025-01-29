@@ -4,7 +4,6 @@ import { links } from "@/lib/links";
 import MobileSidebarButton from "./MobileSidebarButton";
 import useSidebarStore from "@/store/sidebarStore";
 import SideBarUserProfile from "./SidebarUserProfile";
-import LogOutModal from "./LogOutModal";
 import LogoutButton from "./LogoutButton";
 import { useDashboardStore } from "@/store/dashboardStore";
 import { useQueryClient } from "@tanstack/react-query";
