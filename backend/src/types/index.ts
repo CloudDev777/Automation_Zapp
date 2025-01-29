@@ -147,7 +147,7 @@ export type ZapCreateInput = z.infer<typeof zapCreateSchema>;
 
 export const createAvailableActionSchema = z.object({
   id: z.string().optional(),
-  name: z.string({ required_error: "Action name is required" }),
+  name: z.string({ required_error: "name is required" }),
   image: z.string().optional(),
 });
 
