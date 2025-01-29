@@ -3,13 +3,22 @@ import { Request, Response } from "express";
 
 import { prismaClient } from "../db";
 import { CreateAvailableTriggerInput } from "../types";
-import { NotFoundError } from "../errors";
+import { InternalServerError, NotFoundError } from "../errors";
+import { FirebaseImageHandler } from "../middlewares/firebaseUploader";
 
 export const createAvailableTrigger = async (
   req: Request<{}, {}, CreateAvailableTriggerInput>,
   res: Response
 ) => {
-  const { name, image } = req.body;
+  let { name, image } = req.body;
+
+  if (req.file) {
+    const res = await FirebaseImageHandler.uploadImage(req.file);
+    if (!res) {
+      throw new InternalServerError("Error uploading image");
+    }
+    image = res?.downloadURL;
+  }
 
   const trigger = await prismaClient.availableTrigger.create({
     data: {
@@ -23,7 +32,6 @@ export const createAvailableTrigger = async (
 
 export const getAvailableTrigger = async (req: Request, res: Response) => {
   const availableTriggers = await prismaClient.availableTrigger.findMany({});
-
   res.status(StatusCodes.OK).json({ availableTriggers });
 };
 
@@ -35,8 +43,12 @@ export const deleteAvailableTrigger = async (req: Request, res: Response) => {
   });
 
   if (!exists) {
-     throw new NotFoundError(`Available Trigger with id: ${id} does not exists!`);
-   }
+    throw new NotFoundError(
+      `Available Trigger with id: ${id} does not exists!`
+    );
+  }
+
+  await FirebaseImageHandler.deleteImage(exists.image!);
 
   await prismaClient.availableTrigger.delete({
     where: {
