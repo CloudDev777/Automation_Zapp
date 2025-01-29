@@ -1,6 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { UnauthenticatedError } from "../errors";
+import {
+  InternalServerError,
+  NotFoundError,
+  UnauthenticatedError,
+} from "../errors";
 import {
   createTokenUser,
   attachCookiesToResponse,
@@ -10,7 +14,7 @@ import {
 
 import { prismaClient } from "../db";
 import { TokenUser, UpdatePasswordInput, UpdateUserInput } from "../types";
-import { uploadFileToFirebase } from "../middlewares/firebaseUploader";
+import { FirebaseImageHandler } from "../middlewares/firebaseUploader";
 
 export const showCurrentUser = async (
   req: Request,
@@ -26,8 +30,19 @@ export const updateUser = async (
 ) => {
   // Check if files are included in the request
   if (req.file) {
-    // Format and upload screenshot to Firebase
-    const fireBaseResponse = await uploadFileToFirebase(req.file);
+    const oldImageUrl = await prismaClient.user.findUnique({
+      where: { id: Number(req.user?.userId) },
+    });
+
+    if (!oldImageUrl?.image) throw new NotFoundError("No image found");
+
+    const fireBaseResponse = await FirebaseImageHandler.updateImage({
+      oldImageUrl: oldImageUrl.image,
+      newImage: req.file,
+    });
+    
+    if (!fireBaseResponse)
+      throw new InternalServerError("Failed to update image");
 
     req.body.image = fireBaseResponse.downloadURL;
   }
