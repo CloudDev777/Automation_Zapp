@@ -3,7 +3,7 @@ import {
   authenticateUser,
   authorizePermissions,
 } from "../middlewares/authentication";
-
+import imageUploadMiddleware from "../middlewares/multerMiddleware";
 const router = Router();
 
 import {
@@ -25,7 +25,7 @@ router
     (req: Request, res: Response, next: NextFunction) =>
       authenticateUser(req, res, next),
     authorizePermissions("admin"),
-
+    imageUploadMiddleware.single("image"),
     validateAvailableActionInputMiddleware,
     (req: Request, res: Response, next: NextFunction) =>
       createAvailableAction(req, res)
