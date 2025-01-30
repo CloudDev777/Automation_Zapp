@@ -21,3 +21,4 @@ export { default as ChangePassword } from "./ChangePassword";
 export { default as DashboardCardsList } from "./DashboardCardsList";
 export { default as ComingSoon } from "./ComingSoon";
 export { default as NoZapFound } from "./NoZapFound";
+export { default as CopyableWebhookUrl } from "./CopyableWebhookUrl";
