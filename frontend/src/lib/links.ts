@@ -1,5 +1,7 @@
 import { History, Menu, Settings, Zap } from "lucide-react";
 
+export const WEBHOOK_BASE_URL = "http://localhost:3001";
+
 export const links = [
   {
     to: "/dashboard",
