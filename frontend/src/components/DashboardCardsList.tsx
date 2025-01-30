@@ -23,7 +23,7 @@ const DashboardCardsList = () => {
       <div className="bg-white p-6 rounded-lg border border-neutral-200/20">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-500">Total Executions</p>
+            <p className="text-sm text-gray-500">Total Zaps</p>
             <h3 className="text-2xl font-bold text-gray-800">
               {isLoading ? "0" : data.totalZaps}
             </h3>
