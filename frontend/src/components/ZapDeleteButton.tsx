@@ -17,6 +17,7 @@ const ZapDeleteButton = ({ zapId }: { zapId: string }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["zaps"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
       toast.success("Zap deleted successfully!");
       navigate("/dashboard/zaps");
     },
