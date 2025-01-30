@@ -8,6 +8,7 @@ import { QueryClient, useQuery } from "@tanstack/react-query";
 import { redirect } from "react-router-dom";
 import NoZapFound from "./NoZapFound";
 
+
 export const loader = (queryClient: QueryClient) => async () => {
   try {
     const { data } = await queryClient.ensureQueryData(zapsQuery);
@@ -62,15 +63,33 @@ const ZapListTable = () => {
                                   <Zap className="w-6 h-6 text-indigo-600" />
                                 </div>
                                 <div className="ml-4">
-                                  <div className="text-sm font-medium text-gray-900">
+                                  {/* Zap Name */}
+                                  <div className="text-sm font-semibold text-gray-900">
                                     {zap.zapName}
                                   </div>
-                                  <div className="text-sm text-gray-500">
-                                    {zap.trigger.type.name} →{" "}
-                                    {zap.actions
-                                      .map((action) => action.type.name)
-                                      .join(" → ")}{" "}
-                                    {/*TODO: Add icons instead of names */}
+
+                                  {/* Trigger & Actions */}
+                                  <div className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">
+                                    {/* Trigger */}
+                                    <div className="flex items-center gap-1">
+                                      <img
+                                        src={zap.trigger.type.image as string}
+                                        alt={zap.trigger.type.name as string}
+                                        className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
+                                      />
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="flex items-center gap-1">
+                                      {zap.actions.map((action) => (
+                                        <img
+                                          key={action.id}
+                                          src={action.type.image as string}
+                                          alt={action.type.name as string}
+                                          className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
+                                        />
+                                      ))}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
