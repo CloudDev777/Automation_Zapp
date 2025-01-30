@@ -3,11 +3,12 @@ import { Zap } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import DeleteZapModal from "./DeleteZapModal";
-import { zapsQuery } from "@/lib/queries";
+import { userQuery, zapsQuery } from "@/lib/queries";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { redirect } from "react-router-dom";
 import NoZapFound from "./NoZapFound";
-
+import { WEBHOOK_BASE_URL } from "@/lib/links";
+import CopyableWebhookUrl from "./CopyableWebhookUrl";
 
 export const loader = (queryClient: QueryClient) => async () => {
   try {
@@ -21,6 +22,10 @@ export const loader = (queryClient: QueryClient) => async () => {
 const ZapListTable = () => {
   const { data, isLoading } = useQuery(zapsQuery);
   const zaps: ZapType[] = data?.zaps;
+  const {
+    data: { user },
+  } = useQuery(userQuery);
+
   dayjs.extend(relativeTime);
   return (
     <>
@@ -40,6 +45,9 @@ const ZapListTable = () => {
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Name
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Webhook URL
                         </th>
                         <th className="hidden md:block px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Status
@@ -62,7 +70,7 @@ const ZapListTable = () => {
                                 <div className="flex-shrink-0 h-10 w-10 bg-indigo-100 rounded-full flex items-center justify-center">
                                   <Zap className="w-6 h-6 text-indigo-600" />
                                 </div>
-                                <div className="ml-4">
+                                <div className="ml-4 grid gap-1">
                                   {/* Zap Name */}
                                   <div className="text-sm font-semibold text-gray-900">
                                     {zap.zapName}
@@ -93,6 +101,11 @@ const ZapListTable = () => {
                                   </div>
                                 </div>
                               </div>
+                            </td>
+                            <td>
+                              <CopyableWebhookUrl
+                                url={`${WEBHOOK_BASE_URL}/hooks/catch/${user.userId}/${zap.id}`}
+                              />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap hidden md:block">
                               <span className="px-2 inline-flex text-xs leading-5 mt-3 font-semibold rounded-full bg-green-100 text-green-800">
@@ -136,6 +149,9 @@ const ZapListTable = () => {
                     <div className="h-4 bg-gray-200 rounded w-16"></div>
                   </th>
                   <th className="px-6 py-3 text-left">
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </th>
+                  <th className="px-6 py-3 text-left">
                     <div className="h-4 bg-gray-200 rounded w-20"></div>
                   </th>
                   <th className="px-6 py-3 text-left">
@@ -155,6 +171,9 @@ const ZapListTable = () => {
                           <div className="h-3 bg-gray-200 rounded w-24"></div>
                         </div>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="h-4 bg-gray-200 rounded w-16"></div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="h-4 bg-gray-200 rounded w-16"></div>
