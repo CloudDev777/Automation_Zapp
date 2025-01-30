@@ -42,3 +42,11 @@ export const availableActionsQuery = {
     return data;
   },
 };
+
+export const dashboardQuery = {
+  queryKey: ["dashboard"],
+  queryFn: async () => {
+    const { data } = await customFetch.get("/dashboard/excutions");
+    return data;
+  },
+};
