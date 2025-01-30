@@ -52,7 +52,6 @@ export const updateAvailableAction = async (req: Request, res: Response) => {
       oldImageUrl: image,
       newImage: req.file,
     });
-    // const res = await FirebaseImageHandler.uploadImage(req.file); //TODO: remove this later
     if (!res) {
       throw new InternalServerError("Unable to update image.");
     }
@@ -83,13 +82,13 @@ export const deleteAvailableAction = async (req: Request, res: Response) => {
     throw new NotFoundError(`Available Action with id: ${id} does not exists!`);
   }
 
-  await FirebaseImageHandler.deleteImage(exists?.image!);
-
   await prismaClient.availableAction.delete({
     where: {
       id,
     },
   });
+  
+  await FirebaseImageHandler.deleteImage(exists?.image!);
 
   res
     .status(StatusCodes.OK)
