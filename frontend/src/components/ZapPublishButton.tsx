@@ -38,6 +38,7 @@ const PublishModal = ({
       resetZap();
       navigate("/dashboard/zaps");
       queryClient.invalidateQueries({ queryKey: ["zaps"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
       toast.success("Zap published successfully");
       resetWorkflow();
     },
