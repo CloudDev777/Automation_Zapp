@@ -53,7 +53,6 @@ export const updateAvailableTrigger = async (req: Request, res: Response) => {
       oldImageUrl: image,
       newImage: req.file,
     });
-    // const res = await FirebaseImageHandler.uploadImage(req.file);  //TODO: remove this later
     if (!res) {
       throw new InternalServerError("Unable to update image.");
     }
@@ -86,13 +85,12 @@ export const deleteAvailableTrigger = async (req: Request, res: Response) => {
     );
   }
 
-  await FirebaseImageHandler.deleteImage(exists.image!);
-
   await prismaClient.availableTrigger.delete({
     where: {
       id,
     },
   });
+  await FirebaseImageHandler.deleteImage(exists.image!);
 
   res
     .status(StatusCodes.OK)
