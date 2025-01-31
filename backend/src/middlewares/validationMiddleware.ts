@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { BadRequestError, UnauthorizedError } from "../errors";
 import { z, ZodSchema } from "zod";
 import {
+  createAppSchema,
   createAvailableActionSchema,
   validateForgotPasswordInput,
   validateLoginInput,
@@ -72,3 +73,4 @@ export const validateZapInputMiddleware = withValidationErrors(zapCreateSchema);
 export const validateAvailableActionInputMiddleware = withValidationErrors(
   createAvailableActionSchema
 );
+export const validateAppInputMiddleware = withValidationErrors(createAppSchema);
