@@ -104,21 +104,21 @@ model Action {
 }
 
 model AvailableAction {
-  id      String   @id @default(uuid())
-  name    String
-  image   String?
-  app     App      @relation(fields: [appId], references: [id])
-  appId   String   @default("null")
-  actions Action[]
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  app         App      @relation(fields: [appId], references: [id])
+  appId       String
+  actions     Action[]
 }
 
 model AvailableTrigger {
-  id       String    @id @default(uuid())
-  name     String
-  image    String?
-  triggers Trigger[]
-  app      App       @relation(fields: [appId], references: [id])
-  appId    String    @default("null")
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  triggers    Trigger[]
+  app         App       @relation(fields: [appId], references: [id])
+  appId       String
 }
 
 model ZapRun {
