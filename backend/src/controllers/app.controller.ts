@@ -2,14 +2,22 @@ import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { prismaClient } from "../db";
 import { CreateAppInput } from "../types";
-import { InternalServerError, NotFoundError } from "../errors";
+import { BadRequestError, InternalServerError, NotFoundError } from "../errors";
 import { FirebaseImageHandler } from "../middlewares/firebaseUploader";
 
 export const createApp = async (
   req: Request<{}, {}, CreateAppInput>,
   res: Response
 ) => {
-  let { name, image } = req.body;
+  let { name, image, description } = req.body;
+
+  const exists = await prismaClient.app.findFirst({
+    where: { name },
+  });
+
+  if (exists) {
+    throw new BadRequestError(`App with name: ${name} already exists!`);
+  }
 
   if (req.file) {
     const res = await FirebaseImageHandler.uploadImage(req.file);
@@ -23,6 +31,7 @@ export const createApp = async (
     data: {
       name,
       icon: image,
+      description,
     },
   });
 
