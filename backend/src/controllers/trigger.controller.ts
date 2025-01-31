@@ -1,29 +1,27 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-
 import { prismaClient } from "../db";
 import { CreateAvailableTriggerInput } from "../types";
-import { InternalServerError, NotFoundError } from "../errors";
-import { FirebaseImageHandler } from "../middlewares/firebaseUploader";
+import { NotFoundError } from "../errors";
 
 export const createAvailableTrigger = async (
   req: Request<{}, {}, CreateAvailableTriggerInput>,
   res: Response
 ) => {
-  let { name, image } = req.body;
+  let { name, description, appId } = req.body;
 
-  if (req.file) {
-    const res = await FirebaseImageHandler.uploadImage(req.file);
-    if (!res) {
-      throw new InternalServerError("Error uploading image");
-    }
-    image = res?.downloadURL;
+  const exists = await prismaClient.app.findFirst({
+    where: { id: appId },
+  });
+  if (!exists) {
+    throw new NotFoundError(`App with id: ${appId} does not exists!`);
   }
 
   const trigger = await prismaClient.availableTrigger.create({
     data: {
       name,
-      image,
+      description,
+      appId,
     },
   });
 
@@ -31,13 +29,23 @@ export const createAvailableTrigger = async (
 };
 
 export const getAvailableTrigger = async (req: Request, res: Response) => {
-  const availableTriggers = await prismaClient.availableTrigger.findMany({});
+  const availableTriggers = await prismaClient.availableTrigger.findMany({
+    include: {
+      app: {
+        select: {
+          name: true,
+          icon: true,
+        },
+      },
+    },
+  });
   res.status(StatusCodes.OK).json({ availableTriggers });
 };
 
 export const updateAvailableTrigger = async (req: Request, res: Response) => {
   const { id } = req.params;
-  let { name, image } = req.body;
+  let { name, description, appId } = req.body;
+
   const exists = await prismaClient.availableTrigger.findFirst({
     where: { id },
   });
@@ -47,16 +55,11 @@ export const updateAvailableTrigger = async (req: Request, res: Response) => {
       `Available Trigger with id: ${id} does not exists!`
     );
   }
-
-  if (req.file) {
-    const res = await FirebaseImageHandler.updateImage({
-      oldImageUrl: image,
-      newImage: req.file,
-    });
-    if (!res) {
-      throw new InternalServerError("Unable to update image.");
-    }
-    image = res.downloadURL;
+  const appExists = await prismaClient.app.findFirst({
+    where: { id: appId },
+  });
+  if (!appExists) {
+    throw new NotFoundError(`App with id: ${appId} does not exists!`);
   }
 
   const availableTrigger = await prismaClient.availableTrigger.update({
@@ -65,7 +68,8 @@ export const updateAvailableTrigger = async (req: Request, res: Response) => {
     },
     data: {
       name,
-      image,
+      description,
+      appId,
     },
   });
 
@@ -90,7 +94,6 @@ export const deleteAvailableTrigger = async (req: Request, res: Response) => {
       id,
     },
   });
-  await FirebaseImageHandler.deleteImage(exists.image!);
 
   res
     .status(StatusCodes.OK)
