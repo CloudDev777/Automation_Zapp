@@ -294,7 +294,7 @@ export const gmailCallback = async (req: Request, res: Response) => {
       accessToken: tokens.access_token!,
       refreshToken: tokens.refresh_token!,
       expiresAt: new Date(Date.now() + tokens.expiry_date!),
-      appId: "c77c30a5-25e5-4cdf-855d-26ddca6ca83b",
+      appId: "288bbd65-f414-4c1d-9114-cfec910a2ae0",
     },
   });
 
