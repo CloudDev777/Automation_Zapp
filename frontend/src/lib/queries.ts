@@ -42,6 +42,13 @@ export const availableActionsQuery = {
     return data;
   },
 };
+export const appsQuery = {
+  queryKey: ["apps"],
+  queryFn: async () => {
+    const { data } = await customFetch.get("/apps");
+    return data;
+  },
+};
 
 export const dashboardQuery = {
   queryKey: ["dashboard"],
