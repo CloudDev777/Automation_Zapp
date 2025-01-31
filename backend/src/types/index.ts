@@ -171,6 +171,4 @@ export const createAppSchema = z.object({
   image: z.string().optional(),
 });
 
-export type CreateAppInput = z.infer<
-  typeof createAvailableTriggerSchema
->;
+export type CreateAppInput = z.infer<typeof createAppSchema>;
