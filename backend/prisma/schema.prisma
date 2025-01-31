@@ -8,22 +8,23 @@ datasource db {
 }
 
 model User {
-  id                          Int       @id @default(autoincrement())
+  id                          Int          @id @default(autoincrement())
   name                        String
-  email                       String    @unique
+  email                       String       @unique
   password                    String
-  role                        String    @default("user")
+  role                        String       @default("user")
   verificationToken           String?
-  isVerified                  Boolean   @default(true)
+  isVerified                  Boolean      @default(true)
   verified                    DateTime?
   passwordToken               String?
   passwordTokenExpirationDate DateTime?
-  createdAt                   DateTime  @default(now())
-  updatedAt                   DateTime  @updatedAt
+  createdAt                   DateTime     @default(now())
+  updatedAt                   DateTime     @updatedAt
   Token                       Token[]
   zaps                        Zap[]
   image                       String?
   company                     String?
+  Connection                  Connection[]
 }
 
 model Newsletter {
@@ -44,17 +45,43 @@ model Token {
   updatedAt    DateTime @updatedAt
 }
 
+model App {
+  id          String             @id @default(uuid())
+  name        String             @unique
+  description String?
+  icon        String?
+  triggers    AvailableTrigger[]
+  actions     AvailableAction[]
+  connections Connection[]
+}
+
+model Connection {
+  id           String    @id @default(uuid())
+  user         User      @relation(fields: [userId], references: [id])
+  userId       Int
+  app          App       @relation(fields: [appId], references: [id])
+  appId        String
+  accessToken  String
+  refreshToken String?
+  expiresAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  Zap          Zap[]
+}
+
 model Zap {
-  id                 String   @id @default(uuid())
+  id                 String      @id @default(uuid())
   zapName            String
   availableTriggerId String
   userId             Int
   trigger            Trigger?
   actions            Action[]
   zapRuns            ZapRun[]
-  user               User     @relation(fields: [userId], references: [id])
-  createdAt          DateTime @default(now())
-  isActive           Boolean  @default(true)
+  user               User        @relation(fields: [userId], references: [id])
+  connectionId       String?
+  connection         Connection? @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  createdAt          DateTime    @default(now())
+  isActive           Boolean     @default(true)
 }
 
 model Trigger {
@@ -80,6 +107,8 @@ model AvailableAction {
   id      String   @id @default(uuid())
   name    String
   image   String?
+  app     App      @relation(fields: [appId], references: [id])
+  appId   String   @default("null")
   actions Action[]
 }
 
@@ -88,12 +117,15 @@ model AvailableTrigger {
   name     String
   image    String?
   triggers Trigger[]
+  app      App       @relation(fields: [appId], references: [id])
+  appId    String    @default("null")
 }
 
 model ZapRun {
   id           String        @id @default(uuid())
   zapId        String
   metadata     Json
+  status       String        @default("active") // new field: "pending", "success", "failed"
   zap          Zap           @relation(fields: [zapId], references: [id], onDelete: Cascade)
   zapRunOutbox ZapRunOutbox?
 }

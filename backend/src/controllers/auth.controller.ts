@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { google } from "googleapis";
 import { BadRequestError, UnauthenticatedError } from "../errors";
 import { randomBytes } from "crypto";
 
@@ -13,7 +14,6 @@ import {
 
 import { comparePassword, hashPassword } from "../utils/passwordUtils";
 import { prismaClient } from "../db";
-import { User } from "@prisma/client";
 import {
   ForgotPasswordInput,
   LoginInput,
@@ -22,6 +22,7 @@ import {
   TokenUser,
   VerifyEmailInput,
 } from "../types";
+import { oauth2Client } from "..";
 
 export const registerUser = async (
   req: Request<{}, {}, RegisterInput>,
@@ -254,4 +255,57 @@ export const resetPassword = async (
   } else {
     throw new BadRequestError("Invalid or expired token");
   }
+};
+
+// Redirect users to Google's OAuth 2.0 authorization URL
+export const gmailAuth = (req: Request, res: Response) => {
+  const url = oauth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: [
+      "https://www.googleapis.com/auth/gmail.readonly", // Read emails (Trigger)
+      "https://www.googleapis.com/auth/gmail.send", // Send emails (Action)
+    ],
+  });
+  res.redirect(url);
+};
+
+// Handle OAuth callback from Google (without try-catch)
+export const gmailCallback = async (req: Request, res: Response) => {
+  const { code } = req.query;
+
+  if (!code || typeof code !== "string") {
+    throw new BadRequestError("Invalid request. No code provided.");
+  }
+
+  // Exchange authorization code for access & refresh tokens
+  const { tokens } = await oauth2Client.getToken(code);
+  oauth2Client.setCredentials(tokens);
+
+  // Save the tokens in DB (Example with Prisma)
+  // Assuming you have a `GoogleToken` model with `userId` & `accessToken`
+  // if (!req.user?.userId) {
+  //   throw new BadRequestError("User ID is required");
+  // }
+
+  await prismaClient.connection.create({
+    data: {
+      // userId: req.user.userId, // Replace with actual user ID
+      userId: 1,
+      accessToken: tokens.access_token!,
+      refreshToken: tokens.refresh_token!,
+      expiresAt: new Date(Date.now() + tokens.expiry_date!),
+      appId: "c77c30a5-25e5-4cdf-855d-26ddca6ca83b",
+    },
+  });
+
+  // Example: Fetch user Gmail profile (optional)
+  const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+
+  const profile = await gmail.users.getProfile({ userId: "me" });
+
+  res.json({
+    message: "Authentication successful!",
+    email: profile.data.emailAddress,
+    tokens,
+  });
 };

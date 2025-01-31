@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+import { OAuth2Client } from "google-auth-library";
 import "express-async-errors";
 import express from "express";
 import morgan from "morgan";
@@ -15,7 +16,7 @@ import userRouter from "./routes/user.routes";
 import zapRouter from "./routes/zap.routes";
 import triggerRouter from "./routes/trigger.routes";
 import actionRouter from "./routes/action.routes";
-import newsletterRouter from './routes/newsletter.routes';
+import newsletterRouter from "./routes/newsletter.routes";
 import dashboardRouter from "./routes/dashboard.routes";
 
 // Middleware
@@ -33,6 +34,11 @@ app.use(express.json());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+export const oauth2Client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URI // e.g., 'https://yourapp.com/oauth2/callback'
+);
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
