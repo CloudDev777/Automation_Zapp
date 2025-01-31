@@ -164,3 +164,13 @@ export const createAvailableTriggerSchema = z.object({
 export type CreateAvailableTriggerInput = z.infer<
   typeof createAvailableTriggerSchema
 >;
+
+export const createAppSchema = z.object({
+  id: z.string().optional(),
+  name: z.string({ required_error: "App name is required" }),
+  image: z.string().optional(),
+});
+
+export type CreateAppInput = z.infer<
+  typeof createAvailableTriggerSchema
+>;
