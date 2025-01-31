@@ -147,8 +147,15 @@ export type ZapCreateInput = z.infer<typeof zapCreateSchema>;
 
 export const createAvailableActionSchema = z.object({
   id: z.string().optional(),
-  name: z.string({ required_error: "name is required" }),
-  image: z.string().optional(),
+  appId: z
+    .string({ required_error: "AppId is required" })
+    .min(1, { message: "AppId is required" }),
+  name: z
+    .string({ required_error: "Action name is required" })
+    .min(1, { message: "Action name is required" }),
+  description: z
+    .string({ required_error: "description is required" })
+    .min(1, { message: "description is required" }),
 });
 
 export type CreateAvailableActionInput = z.infer<
@@ -157,8 +164,15 @@ export type CreateAvailableActionInput = z.infer<
 
 export const createAvailableTriggerSchema = z.object({
   id: z.string().optional(),
-  name: z.string({ required_error: "Action name is required" }),
-  image: z.string().optional(),
+  appId: z
+    .string({ required_error: "AppId is required" })
+    .min(1, { message: "AppId is required" }),
+  name: z
+    .string({ required_error: "Trigger name is required" })
+    .min(1, { message: "Trigger name is required" }),
+  description: z
+    .string({ required_error: "description is required" })
+    .min(1, { message: "description is required" }),
 });
 
 export type CreateAvailableTriggerInput = z.infer<
