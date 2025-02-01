@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import { oauth2Client } from "..";
-import { BadRequestError } from "../errors";
+import { BadRequestError, NotFoundError } from "../errors";
 import { prismaClient } from "../db";
 import { Request, Response } from "express";
 
@@ -31,13 +31,26 @@ export const oAuthCallback = async (req: Request, res: Response) => {
     throw new BadRequestError("User ID is required");
   }
 
+  const gmailApp = await prismaClient.app.findFirst({
+    where: {
+      name: "Gmail",
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!gmailApp) {
+    throw new BadRequestError("Gmail app not found");
+  }
+
   await prismaClient.connection.create({
     data: {
       userId: req.user.userId, // Replace with actual user ID
       accessToken: tokens.access_token!,
       refreshToken: tokens.refresh_token!,
       expiresAt: new Date(Date.now() + tokens.expiry_date!),
-      appId: "288bbd65-f414-4c1d-9114-cfec910a2ae0",
+      appId: gmailApp.id,
     },
   });
 
@@ -46,7 +59,6 @@ export const oAuthCallback = async (req: Request, res: Response) => {
   const profile = await gmail.users.getProfile({ userId: "me" });
 
   // Respond with success message and user details
-  // Send a postMessage to the parent window
   res.send(`
      <html>
       <body>
@@ -66,4 +78,37 @@ export const oAuthCallback = async (req: Request, res: Response) => {
       </body>
     </html>
 `);
+};
+
+export const getConnections = async (req: Request, res: Response) => {
+  const query = req.query;
+  const appId = query.appId as string;
+  const userId = req.user!.userId; // Assuming authentication is handled
+
+  if (!appId && !userId) {
+    throw new BadRequestError("App ID is required");
+  }
+
+  const connections = await prismaClient.connection.findMany({
+    where: { appId, userId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  if (!connections) {
+    throw new NotFoundError(
+      `Connection not found for appId: ${appId}, userId: ${userId}`
+    );
+  }
+
+  res.json({
+    connections,
+  });
 };
