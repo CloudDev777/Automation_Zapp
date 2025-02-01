@@ -42,12 +42,25 @@ export const availableActionsQuery = {
     return data;
   },
 };
+
 export const appsQuery = {
   queryKey: ["apps"],
   queryFn: async () => {
     const { data } = await customFetch.get("/apps");
     return data;
   },
+};
+
+export const connectionsQuery = (appId: string) => {
+  return {
+    queryKey: ["connections", appId],
+    queryFn: async () => {
+      const { data } = await customFetch.get(
+        `/oauth2/connections?appId=${appId}`
+      );
+      return data;
+    },
+  };
 };
 
 export const dashboardQuery = {
