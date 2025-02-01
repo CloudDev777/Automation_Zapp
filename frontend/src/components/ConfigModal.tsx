@@ -7,6 +7,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
+import ConnectionList from "./ConnectionList";
 
 // ConfigurationModal.tsx
 const ConfigModal = ({
@@ -41,6 +42,8 @@ const ConfigModal = ({
     );
   }, [initialAppId, type, triggersData, actionsData]);
 
+  const [connectedEmail, setConnectedEmail] = React.useState("");
+
   const handleConnect = async () => {
     const authWindow = window.open(
       OAUTH_GMAIL,
@@ -54,7 +57,6 @@ const ConfigModal = ({
     }
 
     const messageHandler = (event: MessageEvent) => {
-      console.log("OAuth message received:", event);
 
       if (event.origin !== "http://localhost:3000") {
         console.error("Invalid origin:", event.origin);
@@ -62,8 +64,8 @@ const ConfigModal = ({
       }
 
       if (event.data?.type === "oauth_complete" && event.data?.success) {
-        console.log("OAuth completed successfully:", event.data);
         setIsConnected(true);
+        setConnectedEmail(event.data.email); // Store the connected email
         window.removeEventListener("message", messageHandler);
       } else {
         console.error("OAuth failed or incomplete data:", event.data);
@@ -136,25 +138,27 @@ const ConfigModal = ({
           </div>
 
           {/* Connect Account Button */}
-          {!isConnected && (
-            <div className="flex items-center justify-between bg-blue-50 p-4 rounded-lg">
-              <div>
-                <h3 className="font-medium text-blue-700">
-                  Connect {currentApp?.name}
-                </h3>
-                <p className="text-sm text-blue-600">
-                  Authorization required to proceed
-                </p>
-              </div>
-              <button
-                onClick={handleConnect}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              >
-                Connect Account
-              </button>
+          <div className="flex items-center justify-between bg-blue-50 p-4 rounded-lg">
+            <div>
+              <h3 className="font-medium text-blue-700">
+                {isConnected
+                  ? `Connected as ${connectedEmail}`
+                  : `Connect ${currentApp?.name}`}
+              </h3>
+              <p className="text-sm text-blue-600">
+                {isConnected
+                  ? "You are connected"
+                  : "Authorization required to proceed"}
+              </p>
             </div>
-          )}
-
+            <button
+              onClick={handleConnect}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              {isConnected ? "Connected" : "Connect Account"}
+            </button>
+          </div>
+          <ConnectionList appId={initialAppId} />
           {/* Action Buttons */}
           <div className="flex justify-end space-x-3 mt-6">
             <button
