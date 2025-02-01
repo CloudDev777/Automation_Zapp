@@ -54,8 +54,25 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 //     max: 60,
 //   })
 // );
-app.use(helmet());
-app.use(cors());
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "default-src": ["*"], // Allow everything
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "*"],
+      "img-src": ["*", "data:"],
+      "connect-src": ["*"],
+      "style-src": ["*", "'unsafe-inline'"],
+      "frame-src": ["*"],
+    },
+  })
+);
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 // app.use(
 //   helmet.contentSecurityPolicy({
 //     useDefaults: true,
