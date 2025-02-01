@@ -18,8 +18,6 @@ import {
   verifyEmail,
   forgotPassword,
   resetPassword,
-  gmailAuth,
-  gmailCallback,
 } from "../controllers/auth.controller";
 
 const router = Router();
@@ -28,14 +26,6 @@ router.post(
   "/register",
   validateRegisterInputMiddleware,
   (req: Request, res: Response, next: NextFunction) => registerUser(req, res)
-);
-
-router.get("/gmail", (req: Request, res: Response, next: NextFunction) =>
-  gmailAuth(req, res)
-);
-
-router.get("/oauth2/callback", (req: Request, res: Response, next: NextFunction) =>
-  gmailCallback(req, res)
 );
 
 router.post(
