@@ -9,6 +9,7 @@ import {
   appsQuery,
   availableActionsQuery,
   availableTriggersQuery,
+  connectionsQuery,
 } from "@/lib/queries";
 import { useWorkflowStore } from "@/store/workflowStore";
 import { useZapCreationStore } from "@/store/zapStore";
@@ -25,6 +26,7 @@ export const loader = (queryClient: QueryClient) => async () => {
     const { data: actions } = await queryClient.ensureQueryData(
       availableActionsQuery
     );
+
     const { data: apps } = await queryClient.ensureQueryData(appsQuery);
     return { triggers, actions, apps };
   } catch (error) {
