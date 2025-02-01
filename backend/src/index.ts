@@ -18,6 +18,7 @@ import triggerRouter from "./routes/trigger.routes";
 import actionRouter from "./routes/action.routes";
 import newsletterRouter from "./routes/newsletter.routes";
 import dashboardRouter from "./routes/dashboard.routes";
+import ouathRouter from "./routes/oauth.routes";
 import appRouter from "./routes/app.routes";
 
 // Middleware
@@ -74,6 +75,7 @@ app.use(cors());
 
 // Routes
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/oauth2", ouathRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/zaps", zapRouter);
 app.use("/api/v1/triggers", triggerRouter);
