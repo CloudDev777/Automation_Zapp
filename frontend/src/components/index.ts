@@ -22,3 +22,8 @@ export { default as DashboardCardsList } from "./DashboardCardsList";
 export { default as ComingSoon } from "./ComingSoon";
 export { default as NoZapFound } from "./NoZapFound";
 export { default as CopyableWebhookUrl } from "./CopyableWebhookUrl";
+export { default as AddBlockButton } from "./AddBlockButton";
+export { default as AppSelectionModal } from "./AppSelectionModal";
+export { default as ConfigModal } from "./ConfigModal";
+export { default as BlockComponent } from "./BlockComponent";
+export { default as EnhancedConfigModal } from "./EnhancedConfigModal";
