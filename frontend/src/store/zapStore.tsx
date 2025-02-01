@@ -47,7 +47,7 @@ export const useZapCreationStore = create<ZapCreationStore>((set) => ({
     set((state) => ({
       zapData: { ...state.zapData, zapName: name },
     })),
-    
+
   setTriggerName: (triggerName) =>
     set((state) => ({
       zapData: { ...state.zapData, triggerName },
