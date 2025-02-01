@@ -1,6 +1,7 @@
 import { History, Menu, Settings, Zap } from "lucide-react";
 
 export const WEBHOOK_BASE_URL = "http://localhost:3001";
+export const OAUTH_GMAIL = "http://localhost:3000/api/v1/oauth2/gmail";
 
 export const links = [
   {
