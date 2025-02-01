@@ -27,3 +27,5 @@ export { default as AppSelectionModal } from "./AppSelectionModal";
 export { default as ConfigModal } from "./ConfigModal";
 export { default as BlockComponent } from "./BlockComponent";
 export { default as EnhancedConfigModal } from "./EnhancedConfigModal";
+export { default as ConnectionList } from "./ConnectionList";
+export { default as ConnectionSelector } from "./ConnectionSelector";
