@@ -44,6 +44,10 @@ export const oAuthCallback = async (req: Request, res: Response) => {
     throw new BadRequestError("Gmail app not found");
   }
 
+  // Example: Fetch user Gmail profile (optional)
+  const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+  const profile = await gmail.users.getProfile({ userId: "me" });
+
   await prismaClient.connection.create({
     data: {
       userId: req.user.userId, // Replace with actual user ID
@@ -51,13 +55,9 @@ export const oAuthCallback = async (req: Request, res: Response) => {
       refreshToken: tokens.refresh_token!,
       expiresAt: new Date(Date.now() + tokens.expiry_date!),
       appId: gmailApp.id,
+      connectedEmail: profile.data.emailAddress,
     },
   });
-
-  // Example: Fetch user Gmail profile (optional)
-  const gmail = google.gmail({ version: "v1", auth: oauth2Client });
-  const profile = await gmail.users.getProfile({ userId: "me" });
-
   // Respond with success message and user details
   res.send(`
      <html>
