@@ -114,14 +114,14 @@ const ConfigModal = ({
               className="w-full p-3 text-left border rounded-lg hover:bg-gray-50 flex items-center justify-between"
             >
               <span>{connection.connectedEmail}</span>
-              {selectedConnection === connection.id && (
-                <span className="text-blue-600">✓</span>
+              {selectedConnection?.id === connection.id && (
+                <span className="text-purple-600">✓</span>
               )}
             </button>
           ))}
           <button
             onClick={handleConnect}
-            className="px-4 py-2  bg-blue-600 te  xt-white rounded-md w-full hover:bg-blue-700"
+            className="px-4 py-2  bg-purple-600 text-white rounded-md w-full hover:bg-purple-700"
           >
             Add New Account
           </button>
@@ -179,7 +179,7 @@ const ConfigModal = ({
               Select {type}
             </label>
             <select
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-purple-500 focus:border-purple-500"
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
             >
@@ -192,14 +192,14 @@ const ConfigModal = ({
             </select>
           </div>
 
-          <div className="flex items-center justify-between bg-blue-50 p-4 rounded-lg">
+          <div className="flex items-center justify-between bg-purple-50 p-4 rounded-lg">
             <div>
-              <h3 className="font-medium text-blue-700">
+              <h3 className="font-medium text-purple-700">
                 {selectedConnection?.id
                   ? `Connected as ${selectedConnection.email}`
                   : `Connect ${currentApp?.name}`}
               </h3>
-              <p className="text-sm text-blue-600">
+              <p className="text-sm text-purple-600">
                 {selectedConnection?.id
                   ? "Account connected successfully"
                   : "Authorization required to proceed"}
@@ -208,14 +208,14 @@ const ConfigModal = ({
             {connections.length > 0 ? (
               <button
                 onClick={() => setShowConnectionModal(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
               >
                 Select
               </button>
             ) : (
               <button
                 onClick={handleConnect}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
               >
                 Connect
               </button>
@@ -230,7 +230,7 @@ const ConfigModal = ({
               Cancel
             </button>
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50"
               disabled={!selectedId}
             >
               Save
