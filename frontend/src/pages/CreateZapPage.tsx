@@ -8,8 +8,7 @@ import {
 import {
   appsQuery,
   availableActionsQuery,
-  availableTriggersQuery,
-  connectionsQuery,
+  availableTriggersQuery, 
 } from "@/lib/queries";
 import { useWorkflowStore } from "@/store/workflowStore";
 import { useZapCreationStore } from "@/store/zapStore";
