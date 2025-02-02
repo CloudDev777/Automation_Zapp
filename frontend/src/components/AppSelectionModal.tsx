@@ -1,5 +1,3 @@
-// AppSelectionModal.tsx
-import React from "react";
 import { X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { appsQuery } from "@/lib/queries";
