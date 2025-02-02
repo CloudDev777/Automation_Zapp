@@ -3,13 +3,12 @@ import {
   appsQuery,
   availableActionsQuery,
   availableTriggersQuery,
+  connectionsQuery,
 } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
-import ConnectionList from "./ConnectionList";
 
-// ConfigurationModal.tsx
 const ConfigModal = ({
   isOpen,
   onClose,
@@ -26,10 +25,20 @@ const ConfigModal = ({
   const { data: appsData } = useQuery(appsQuery);
   const { data: triggersData } = useQuery(availableTriggersQuery);
   const { data: actionsData } = useQuery(availableActionsQuery);
+  const { data: connectionsData } = useQuery(connectionsQuery(initialAppId));
 
   const [selectedId, setSelectedId] = React.useState("");
-  const [isConnected, setIsConnected] = React.useState(false);
+  const [showConnectionModal, setShowConnectionModal] = React.useState(false);
+  const [selectedConnection, setSelectedConnection] = React.useState<{
+    id: string;
+    user: {
+      email: string;
+    };
+    email: string;
+  }>();
+
   const currentApp = appsData?.apps.find((app: any) => app.id === initialAppId);
+  const connections = connectionsData?.connections || [];
 
   const filteredItems = React.useMemo(() => {
     if (type === "trigger") {
@@ -41,8 +50,6 @@ const ConfigModal = ({
       (a: any) => a.appId === initialAppId
     );
   }, [initialAppId, type, triggersData, actionsData]);
-
-  const [connectedEmail, setConnectedEmail] = React.useState("");
 
   const handleConnect = async () => {
     const authWindow = window.open(
@@ -57,15 +64,19 @@ const ConfigModal = ({
     }
 
     const messageHandler = (event: MessageEvent) => {
-
+      console.log(event.data);
       if (event.origin !== "http://localhost:3000") {
         console.error("Invalid origin:", event.origin);
         return;
       }
 
       if (event.data?.type === "oauth_complete" && event.data?.success) {
-        setIsConnected(true);
-        setConnectedEmail(event.data.email); // Store the connected email
+        console.log(event.data);
+        setSelectedConnection({
+          id: event.data.id,
+          user: event.data,
+          email: event.data.connectedEmail,
+        });
         window.removeEventListener("message", messageHandler);
       } else {
         console.error("OAuth failed or incomplete data:", event.data);
@@ -75,8 +86,54 @@ const ConfigModal = ({
     window.addEventListener("message", messageHandler);
   };
 
-  if (!isOpen) return null;
+  const ConnectionModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-[400px]">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Select Connection</h3>
+          <button
+            onClick={() => setShowConnectionModal(false)}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <X />
+          </button>
+        </div>
+        <div className="space-y-4">
+          {connections.map((connection: any) => (
+            <button
+              key={connection.id}
+              onClick={() => {
+                console.log(connection.id);
+                setSelectedConnection({
+                  id: connection.id,
+                  user: connection.user,
+                  email: connection.connectedEmail,
+                });
+                setShowConnectionModal(false);
+              }}
+              className="w-full p-3 text-left border rounded-lg hover:bg-gray-50 flex items-center justify-between"
+            >
+              <span>{connection.connectedEmail}</span>
+              {selectedConnection === connection.id && (
+                <span className="text-blue-600">✓</span>
+              )}
+            </button>
+          ))}
+          <button
+            onClick={handleConnect}
+            className="px-4 py-2  bg-blue-600 te  xt-white rounded-md w-full hover:bg-blue-700"
+          >
+            Add New Account
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
+  if (!isOpen) return null;
+  console.log("selectedConnection: ", selectedConnection);
+  console.log("selectedId: ", selectedId);
+  console.log("connections: ", connections);
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-[520px] mx-4">
@@ -91,7 +148,6 @@ const ConfigModal = ({
         </div>
 
         <div className="space-y-6">
-          {/* App Selection Button */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Selected App
@@ -118,7 +174,6 @@ const ConfigModal = ({
             </div>
           </div>
 
-          {/* Trigger/Action Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Select {type}
@@ -137,29 +192,36 @@ const ConfigModal = ({
             </select>
           </div>
 
-          {/* Connect Account Button */}
           <div className="flex items-center justify-between bg-blue-50 p-4 rounded-lg">
             <div>
               <h3 className="font-medium text-blue-700">
-                {isConnected
-                  ? `Connected as ${connectedEmail}`
+                {selectedConnection?.id
+                  ? `Connected as ${selectedConnection.email}`
                   : `Connect ${currentApp?.name}`}
               </h3>
               <p className="text-sm text-blue-600">
-                {isConnected
-                  ? "You are connected"
+                {selectedConnection?.id
+                  ? "Account connected successfully"
                   : "Authorization required to proceed"}
               </p>
             </div>
-            <button
-              onClick={handleConnect}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              {isConnected ? "Connected" : "Connect Account"}
-            </button>
+            {connections.length > 0 ? (
+              <button
+                onClick={() => setShowConnectionModal(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Select
+              </button>
+            ) : (
+              <button
+                onClick={handleConnect}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Connect
+              </button>
+            )}
           </div>
-          <ConnectionList appId={initialAppId} />
-          {/* Action Buttons */}
+
           <div className="flex justify-end space-x-3 mt-6">
             <button
               onClick={onClose}
@@ -169,14 +231,16 @@ const ConfigModal = ({
             </button>
             <button
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-              disabled={!selectedId || !isConnected}
+              disabled={!selectedId}
             >
               Save
             </button>
           </div>
         </div>
       </div>
+      {showConnectionModal && <ConnectionModal />}
     </div>
   );
 };
+
 export default ConfigModal;
