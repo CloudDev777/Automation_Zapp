@@ -5,6 +5,7 @@ import {
   availableTriggersQuery,
   connectionsQuery,
 } from "@/lib/queries";
+import useZapCreationStore from "@/store/zapStore";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
@@ -26,7 +27,7 @@ const ConfigModal = ({
   const { data: triggersData } = useQuery(availableTriggersQuery);
   const { data: actionsData } = useQuery(availableActionsQuery);
   const { data: connectionsData } = useQuery(connectionsQuery(initialAppId));
-
+  const { setTriggerId, setTriggerName } = useZapCreationStore();
   const [selectedId, setSelectedId] = React.useState("");
   const [showConnectionModal, setShowConnectionModal] = React.useState(false);
   const [selectedConnection, setSelectedConnection] = React.useState<{
@@ -181,11 +182,18 @@ const ConfigModal = ({
             <select
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-purple-500 focus:border-purple-500"
               value={selectedId}
-              onChange={(e) => setSelectedId(e.target.value)}
+              onChange={(e) => {
+                setSelectedId(e.target.value);
+                setTriggerId(e.target.value);
+              }}
             >
               <option value="">Select...</option>
               {filteredItems?.map((item: any) => (
-                <option key={item.id} value={item.id}>
+                <option
+                  key={item.id}
+                  onChange={() => setTriggerName(item.name)}
+                  value={item.id}
+                >
                   {item.name}
                 </option>
               ))}
