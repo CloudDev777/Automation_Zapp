@@ -7,6 +7,7 @@ import {
 const router = Router();
 
 import {
+  configureTrigger,
   createAvailableTrigger,
   deleteAvailableTrigger,
   getAvailableTrigger,
@@ -53,5 +54,13 @@ router
       await updateAvailableTrigger(req, res);
     }
   );
+
+router.route("/:zapId/configure").post(
+  (req: Request, res: Response, next: NextFunction) =>
+    authenticateUser(req, res, next),
+  async (req: Request<{ id: string }>, res: Response) => {
+    await configureTrigger(req, res);
+  }
+);
 
 export default router;
