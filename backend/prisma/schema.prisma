@@ -72,8 +72,8 @@ model Connection {
 
 model Zap {
   id                 String      @id @default(uuid())
-  zapName            String
-  availableTriggerId String
+  zapName            String?     @default("Untitled Zap")
+  availableTriggerId String?
   userId             Int
   trigger            Trigger?
   actions            Action[]
@@ -82,7 +82,14 @@ model Zap {
   connectionId       String?
   connection         Connection? @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   createdAt          DateTime    @default(now())
-  isActive           Boolean     @default(true)
+  status             ZapStatus   @default(DRAFT)
+}
+
+enum ZapStatus {
+  DRAFT
+  PUBLISHED
+  PAUSED
+  ERROR
 }
 
 model Trigger {
