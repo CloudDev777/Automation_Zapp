@@ -102,49 +102,6 @@ export const validateResetPasswordInput = z.object({
 });
 export type ResetPasswordInput = z.infer<typeof validateResetPasswordInput>;
 
-export const zapCreateSchema = z.object({
-  availableTriggerId: z
-    .string({
-      required_error: "availableTriggerId is required.",
-      invalid_type_error: "availableTriggerId must be a string.",
-    })
-    .min(1, "availableTriggerId is required.")
-    .uuid("availableTriggerId must be a valid UUID."),
-  triggerMetadata: z.any().optional(),
-  zapName: z
-    .string({
-      required_error: "zapName is required.",
-      invalid_type_error: "zapName must be a string.",
-    })
-    .min(1, "zapName is required."),
-  actions: z
-    .array(
-      z.object(
-        {
-          availableActionId: z
-            .string({
-              required_error: "availableActionId is required.",
-              invalid_type_error: "availableActionId must be a string.",
-            })
-            .min(1, "availableActionId is required.")
-            .uuid("availableActionId must be a valid UUID."),
-          actionMetadata: z.any().optional(),
-        },
-        {
-          required_error: "Object of actions are required.",
-          invalid_type_error: "action must be a valid object.",
-        }
-      ),
-      {
-        required_error: "Array of actions are required.",
-        invalid_type_error: "actions must be a valid object.",
-      }
-    )
-    .min(1, "Atleast 1 action is required."),
-});
-
-export type ZapCreateInput = z.infer<typeof zapCreateSchema>;
-
 export const createAvailableActionSchema = z.object({
   id: z.string().optional(),
   appId: z
