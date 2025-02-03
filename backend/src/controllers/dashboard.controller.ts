@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 export const getDashboardCount = async (req: Request, res: Response) => {
   const activeZaps = await prismaClient.zap.count({
     where: {
-      isActive: true,
+      status: "PUBLISHED",
     },
   });
   const totalZaps = await prismaClient.zap.count();
