@@ -162,7 +162,7 @@ export const configureTrigger = async (req: Request, res: Response) => {
   // Create or update trigger configuration
   const trigger = await prismaClient.trigger.upsert({
     where: {
-      zapId: zapId,
+      zapId,
     },
     update: {
       triggerId: availableTrigger.id,
