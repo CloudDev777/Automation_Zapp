@@ -1,14 +1,10 @@
-import { PageHeader, ZapListTable } from "@/components";
+import { ZapListTable } from "@/components";
+import CreateZapHeader from "@/components/CreateZapHeader";
 
 const ZapsPage = () => {
   return (
     <>
-      <PageHeader
-        title="Zaps"
-        link={"create"}
-        description="Create and customize your automation workflow"
-        butttonText="Create"
-      />
+      <CreateZapHeader />
       <ZapListTable />
     </>
   );
