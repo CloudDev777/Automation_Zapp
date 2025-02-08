@@ -17,6 +17,7 @@ export const action =
       // Parse form data
       const formData = await request.formData();
       const data = Object.fromEntries(formData);
+      console.log(data);
       // Make API call to update user
       await customFetch.patch("/users/updateUser", data, {
         headers: {
