@@ -128,7 +128,7 @@ const ZapListTable = () => {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               <Link
                                 to={`/dashboard/zaps/draft/${zap.id}`}
-                                className="text-white bg-purple-500 px-2 rounded-2xl  "
+                                className="text-white bg-purple-500 px-2 rounded-2xl"
                               >
                                 Edit
                               </Link>
