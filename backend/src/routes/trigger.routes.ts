@@ -58,7 +58,7 @@ router
 router.route("/:zapId/configure").post(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-  async (req: Request<{ id: string }>, res: Response) => {
+  async (req: Request<{ zapId: string }>, res: Response) => {
     await configureTrigger(req, res);
   }
 );
