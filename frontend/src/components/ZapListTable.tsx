@@ -25,7 +25,6 @@ const ZapListTable = () => {
   const {
     data: { user },
   } = useQuery(userQuery);
-  console.log(zaps);
 
   dayjs.extend(relativeTime);
   return (
