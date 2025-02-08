@@ -7,6 +7,7 @@ import imageUploadMiddleware from "../middlewares/multerMiddleware";
 const router = Router();
 
 import {
+  configureAction,
   createAvailableAction,
   deleteAvailableAction,
   getAvailableAction,
@@ -52,5 +53,13 @@ router
       await updateAvailableAction(req, res);
     }
   );
+
+router.route("/:zapId/configure").post(
+  (req: Request, res: Response, next: NextFunction) =>
+    authenticateUser(req, res, next),
+  async (req: Request, res: Response) => {
+    await configureAction(req, res);
+  }
+);
 
 export default router;
