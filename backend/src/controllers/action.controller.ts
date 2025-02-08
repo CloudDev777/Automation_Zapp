@@ -91,3 +91,66 @@ export const deleteAvailableAction = async (req: Request, res: Response) => {
     .status(StatusCodes.OK)
     .json({ msg: `Available Action with id: ${id} is deleted successfully!` });
 };
+
+export const configureAction = async (req: Request, res: Response) => {
+  // TODO: Validate input
+  const userId = req.user?.userId;
+  const { zapId } = req.params;
+  const { actionId, config, metadata } = req.body;
+
+  // Verify the Zap exists and belongs to the user
+  const existingZap = await prismaClient.zap.findUnique({
+    where: {
+      id: zapId,
+      userId: userId,
+    },
+  });
+
+  if (!existingZap) {
+    throw new NotFoundError("Zap not found.");
+  }
+
+  // Verify the action template exists
+  const availableAction = await prismaClient.availableAction.findUnique({
+    where: { id: actionId },
+  });
+
+  if (!availableAction) {
+    throw new NotFoundError("Available Action not found.");
+  }
+
+  // Get the count of existing actions for the Zap
+  const actionCount = await prismaClient.action.count({
+    where: {
+      zapId: zapId,
+    },
+  });
+
+  // Create a new action with the next sortingOrder
+  const action = await prismaClient.action.create({
+    data: {
+      zapId: zapId,
+      actionId: availableAction.id,
+      config: config,
+      metadata: metadata,
+      sortingOrder: actionCount + 1, // Automatically set sortingOrder
+      appId: availableAction.appId,
+    },
+    include: {
+      type: true,
+    },
+  });
+
+  // Update Zap status if needed
+  await prismaClient.zap.update({
+    where: { id: zapId },
+    data: {
+      status: "DRAFT",
+    },
+  });
+
+  res.status(StatusCodes.OK).json({
+    message: "Action configured successfully",
+    action,
+  });
+};
