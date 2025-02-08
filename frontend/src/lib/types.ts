@@ -8,6 +8,7 @@ export type ZapAction = {
   id: string; // UUID
   zapId: string; // UUID
   actionId: string; // UUID
+  app: any;
   metadata: string; // Could use specific type if structure known
   sortingOrder: number; // Order of the action
   type: Type;
@@ -17,6 +18,7 @@ type ZapTrigger = {
   id: string; // UUID
   zapId: string; // UUID
   triggerId: string; // UUID
+  app: any;
   metadata: Record<string, unknown>; // Adjust type based on actual metadata structure
   type: Type;
 };
@@ -27,9 +29,16 @@ type ZapRun = {
   metadata: any;
 };
 
+export enum ZapStatus {
+  DRAFT = "DRAFT",
+  ACTIVE = "ACTIVE",
+  PAUSED = "PAUSED",
+  ERROR = "ERROR",
+}
 export type Zap = {
   id: string; // UUID
   zapName: string;
+  status: ZapStatus;
   availableTriggerId: string; // UUID
   userId: number;
   actions: ZapAction[];
