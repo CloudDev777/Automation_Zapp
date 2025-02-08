@@ -86,14 +86,14 @@ const router = createBrowserRouter([
             index: true,
             element: <ZapsPage />,
           },
+          // {
+          //   path: "create",
+          //   element: <CreateZapPage />,
+          //   loader: createZapsLoader(queryClient),
+          // },
           {
-            path: "create",
+            path: "draft/:zapId",
             element: <CreateZapPage />,
-            loader: createZapsLoader(queryClient),
-          },
-          {
-            path: "edit/:zapId",
-            element: <ComingSoon />,
           },
         ],
       },
