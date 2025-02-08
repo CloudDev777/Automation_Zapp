@@ -91,6 +91,10 @@ const router = createBrowserRouter([
             element: <CreateZapPage />,
             loader: createZapsLoader(queryClient),
           },
+          {
+            path: "edit/:zapId",
+            element: <ComingSoon />,
+          },
         ],
       },
       {
