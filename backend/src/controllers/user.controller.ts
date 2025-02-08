@@ -28,23 +28,33 @@ export const updateUser = async (
   req: Request<{}, {}, UpdateUserInput>,
   res: Response<{ user: TokenUser }>
 ) => {
-  // Check if files are included in the request
   if (req.file) {
     const oldImageUrl = await prismaClient.user.findUnique({
       where: { id: Number(req.user?.userId) },
+      select: { image: true }, // Optimize query by selecting only 'image'
     });
 
-    if (!oldImageUrl?.image) throw new NotFoundError("No image found");
+    let fireBaseResponse;
 
-    const fireBaseResponse = await FirebaseImageHandler.updateImage({
-      oldImageUrl: oldImageUrl.image,
-      newImage: req.file,
-    });
-    
-    if (!fireBaseResponse)
-      throw new InternalServerError("Failed to update image");
+    if (!oldImageUrl?.image) {
+      // Upload new image
+      fireBaseResponse = await FirebaseImageHandler.uploadImage(req.file);
+    } else {
+      // Update existing image
+      fireBaseResponse = await FirebaseImageHandler.updateImage({
+        oldImageUrl: oldImageUrl.image,
+        newImage: req.file,
+      });
+    }
 
-    req.body.image = fireBaseResponse.downloadURL;
+    // ✅ Ensure fireBaseResponse is valid before using it
+    if (
+      fireBaseResponse &&
+      typeof fireBaseResponse === "object" &&
+      "downloadURL" in fireBaseResponse
+    ) {
+      req.body.image = fireBaseResponse.downloadURL;
+    }
   }
   // Update the user with Prisma
   const user = await prismaClient.user.update({
