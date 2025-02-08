@@ -100,38 +100,6 @@ export const deleteAvailableTrigger = async (req: Request, res: Response) => {
     .json({ msg: `Available Trigger with id: ${id} is deleted successfully!` });
 };
 
-// export const configureTrigger = async (req: Request, res: Response) => {
-//   const { id: zapId } = req.params;
-//   const { appId, config, triggerId } = req.body;
-
-//   const appExists = await prismaClient.app.findFirst({
-//     where: { id: appId },
-//   });
-
-//   if (!appExists) {
-//     throw new NotFoundError(`App with id: ${appId} does not exists!`);
-//   }
-
-//   const triggerExists = await prismaClient.availableTrigger.findFirst({
-//     where: { id: triggerId },
-//   });
-
-//   if (!triggerExists) {
-//     throw new NotFoundError(`Trigger with id: ${triggerId} does not exists!`);
-//   }
-
-//   const trigger = await prismaClient.trigger.create({
-//     data: {
-//       zapId,
-//       appId,
-//       triggerId,
-//       config,
-//     },
-//   });
-
-//   res.status(StatusCodes.OK).json(trigger);
-// };
-
 export const configureTrigger = async (req: Request, res: Response) => {
   //TODO:  validate input
   const userId = req.user?.userId;
