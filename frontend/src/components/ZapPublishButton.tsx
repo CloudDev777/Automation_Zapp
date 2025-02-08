@@ -119,7 +119,6 @@ interface Props {
 const ZapPublishButton = ({ title, description }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const zapData = useZapCreationStore((state) => state.zapData);
-  console.log(zapData);
   // Validation function to check if we have required data
   const isPublishEnabled = () => {
     const hasActions = zapData.actions.length > 0;
