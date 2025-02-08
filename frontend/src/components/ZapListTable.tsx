@@ -84,8 +84,8 @@ const ZapListTable = () => {
                                     {/* Trigger */}
                                     <div className="flex items-center gap-1">
                                       <img
-                                        src={zap.trigger.app!.icon!}
-                                        alt={zap.trigger.app!.name!}
+                                        src={zap.trigger?.app.icon!}
+                                        alt={zap.trigger?.app.name!}
                                         className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
                                       />
                                     </div>
@@ -95,8 +95,8 @@ const ZapListTable = () => {
                                       {zap.actions.map((action) => (
                                         <img
                                           key={action.id}
-                                          src={action.app.icon as string}
-                                          alt={action.app.name as string}
+                                          src={action?.app.icon as string}
+                                          alt={action?.app.name as string}
                                           className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
                                         />
                                       ))}
@@ -127,7 +127,7 @@ const ZapListTable = () => {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               <Link
-                                to={`edit/${zap.id}`}
+                                to={`/dashboard/zaps/draft/${zap.id}`}
                                 className="text-white bg-purple-500 px-2 rounded-2xl  "
                               >
                                 Edit
