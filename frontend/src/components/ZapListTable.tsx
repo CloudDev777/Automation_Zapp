@@ -1,11 +1,11 @@
-import { Zap as ZapType } from "@/lib/types";
+import { ZapStatus, Zap as ZapType } from "@/lib/types";
 import { Zap } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import DeleteZapModal from "./DeleteZapModal";
 import { userQuery, zapsQuery } from "@/lib/queries";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { redirect } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import NoZapFound from "./NoZapFound";
 import { WEBHOOK_BASE_URL } from "@/lib/links";
 import CopyableWebhookUrl from "./CopyableWebhookUrl";
@@ -25,6 +25,7 @@ const ZapListTable = () => {
   const {
     data: { user },
   } = useQuery(userQuery);
+  console.log(zaps);
 
   dayjs.extend(relativeTime);
   return (
@@ -56,12 +57,15 @@ const ZapListTable = () => {
                           Last Run
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
+                          Edit
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Delete
                         </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-neutral-200/20">
-                      {zaps.map((zap) => {
+                      {zaps?.map((zap) => {
                         const createdFromNow = dayjs(zap.createdAt).fromNow();
                         return (
                           <tr key={zap.id}>
@@ -81,8 +85,8 @@ const ZapListTable = () => {
                                     {/* Trigger */}
                                     <div className="flex items-center gap-1">
                                       <img
-                                        src={zap.trigger.type.image as string}
-                                        alt={zap.trigger.type.name as string}
+                                        src={zap.trigger.app!.icon!}
+                                        alt={zap.trigger.app!.name!}
                                         className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
                                       />
                                     </div>
@@ -92,8 +96,8 @@ const ZapListTable = () => {
                                       {zap.actions.map((action) => (
                                         <img
                                           key={action.id}
-                                          src={action.type.image as string}
-                                          alt={action.type.name as string}
+                                          src={action.app.icon as string}
+                                          alt={action.app.name as string}
                                           className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
                                         />
                                       ))}
@@ -108,16 +112,32 @@ const ZapListTable = () => {
                               />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap hidden md:block">
-                              <span className="px-2 inline-flex text-xs leading-5 mt-3 font-semibold rounded-full bg-green-100 text-green-800">
-                                {zap.isActive ? "Active" : "Inactive"}
+                              <span
+                                className={`px-2 inline-flex text-xs leading-5 mt-3 font-semibold rounded-full ${
+                                  zap.status === ZapStatus.ACTIVE
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-yellow-100 text-yellow-800"
+                                }`}
+                              >
+                                {zap.status}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {/* @ts-ignore */}
                               {createdFromNow}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              <Link
+                                to={`edit/${zap.id}`}
+                                className="text-white bg-purple-500 px-2 rounded-2xl  "
+                              >
+                                Edit
+                              </Link>
+                            </td>
+
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium gap-1 flex">
                               {/* //TODO: Add START button */}
+
                               <DeleteZapModal zapId={zap.id} />
                             </td>
                           </tr>
