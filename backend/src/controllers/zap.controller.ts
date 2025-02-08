@@ -30,11 +30,14 @@ export const getAllZaps = async (req: Request, res: Response) => {
       actions: {
         include: {
           type: true,
+          app: true,
         },
       },
+
       trigger: {
         include: {
           type: true,
+          app: true,
         },
       },
       zapRuns: true,
