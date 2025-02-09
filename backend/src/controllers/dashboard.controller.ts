@@ -10,5 +10,7 @@ export const getDashboardCount = async (req: Request, res: Response) => {
   });
   const totalZaps = await prismaClient.zap.count();
 
-  res.status(StatusCodes.OK).json({ activeZaps, totalZaps });
+  const connectedApps = await prismaClient.app.count();
+
+  res.status(StatusCodes.OK).json({ activeZaps, totalZaps, connectedApps });
 };
