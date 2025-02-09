@@ -5,7 +5,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import DeleteZapModal from "./DeleteZapModal";
 import { userQuery, zapsQuery } from "@/lib/queries";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { Link, redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import NoZapFound from "./NoZapFound";
 import { WEBHOOK_BASE_URL } from "@/lib/links";
 import CopyableWebhookUrl from "./CopyableWebhookUrl";
@@ -55,17 +55,34 @@ const ZapListTable = () => {
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Last Run
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Edit
-                        </th>
+                        </th> */}
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Delete
+                          Actions
                         </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-neutral-200/20">
                       {zaps?.map((zap) => {
                         const createdFromNow = dayjs(zap.createdAt).fromNow();
+                        // Get all apps used in the Zap (trigger + actions)
+                        const usedApps = new Map();
+
+                        // Add trigger app if it exists
+                        if (zap.trigger?.app) {
+                          usedApps.set(zap.trigger.app.id, zap.trigger.app);
+                        }
+
+                        // Add unique action apps
+                        zap.actions.forEach((action) => {
+                          if (action.app) {
+                            usedApps.set(action.app.id, action.app);
+                          }
+                        });
+
+                        // Convert Map to Array for rendering
+                        const uniqueApps = Array.from(usedApps.values());
                         return (
                           <tr key={zap.id}>
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -81,26 +98,15 @@ const ZapListTable = () => {
 
                                   {/* Trigger & Actions */}
                                   <div className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">
-                                    {/* Trigger */}
-                                    <div className="flex items-center gap-1">
+                                    {uniqueApps.map((app) => (
                                       <img
-                                        src={zap.trigger?.app.icon!}
-                                        alt={zap.trigger?.app.name!}
+                                        key={app.id}
+                                        src={app.icon}
+                                        alt={app.name}
                                         className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
+                                        title={app.name}
                                       />
-                                    </div>
-
-                                    {/* Actions */}
-                                    <div className="flex items-center gap-1">
-                                      {zap.actions.map((action) => (
-                                        <img
-                                          key={action.id}
-                                          src={action?.app.icon as string}
-                                          alt={action?.app.name as string}
-                                          className="w-6 h-6 border border-gray-200 p-[2px] rounded-md"
-                                        />
-                                      ))}
-                                    </div>
+                                    ))}
                                   </div>
                                 </div>
                               </div>
@@ -125,14 +131,14 @@ const ZapListTable = () => {
                               {/* @ts-ignore */}
                               {createdFromNow}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               <Link
                                 to={`/dashboard/zaps/draft/${zap.id}`}
                                 className="text-white bg-purple-500 px-2 rounded-2xl"
                               >
                                 Edit
                               </Link>
-                            </td>
+                            </td> */}
 
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium gap-1 flex">
                               {/* //TODO: Add START button */}
