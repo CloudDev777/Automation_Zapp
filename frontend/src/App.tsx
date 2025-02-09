@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 // Pages imports
 import {
-  CreateZapPage,
+  ZapDraftPage,
   DashboardPage,
   HistoryPage,
   LandingPage,
@@ -31,7 +31,7 @@ import { action as changePasswordAction } from "./components/ChangePassword";
 
 // Loaders imports
 import { loader as dashboardLoader } from "./layouts/DashboardLayout";
-import { loader as createZapsLoader } from "./pages/CreateZapPage";
+import { loader as zapDraftLoader } from "./pages/ZapDraftPage";
 
 // Components imports
 import { ChangePassword, ComingSoon, Error, Loading } from "./components";
@@ -86,14 +86,10 @@ const router = createBrowserRouter([
             index: true,
             element: <ZapsPage />,
           },
-          // {
-          //   path: "create",
-          //   element: <CreateZapPage />,
-          //   loader: createZapsLoader(queryClient),
-          // },
           {
             path: "draft/:zapId",
-            element: <CreateZapPage />,
+            element: <ZapDraftPage />,
+            loader: zapDraftLoader(queryClient),
           },
         ],
       },
