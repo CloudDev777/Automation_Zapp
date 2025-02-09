@@ -15,22 +15,25 @@ import { useZapCreationStore } from "@/store/zapStore";
 import { QueryClient } from "@tanstack/react-query";
 
 import React from "react";
-import { redirect, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, redirect, useLoaderData } from "react-router-dom";
 
 export const loader =
   (queryClient: QueryClient) =>
-  async ({ params }: { params: { zapId: string } }) => {
+  async ({
+    params,
+  }: LoaderFunctionArgs): Promise<
+    Response | { triggers: any; actions: any; apps: any; zapId: string }
+  > => {
     try {
-      const { data: triggers } = await queryClient.ensureQueryData(
+      const triggers = await queryClient.ensureQueryData(
         availableTriggersQuery
       );
-      const { data: actions } = await queryClient.ensureQueryData(
-        availableActionsQuery
-      );
-
-      const { data: apps } = await queryClient.ensureQueryData(appsQuery);
+      const actions = await queryClient.ensureQueryData(availableActionsQuery);
+      const apps = await queryClient.ensureQueryData(appsQuery);
 
       const zapId = params.zapId;
+      if (!zapId) throw new Error("zapId is required");
+
       return { triggers, actions, apps, zapId };
     } catch (error) {
       return redirect("/");
