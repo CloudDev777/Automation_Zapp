@@ -7,7 +7,7 @@ import {
 } from "@/lib/queries";
 import useZapCreationStore from "@/store/zapStore";
 import customFetch from "@/utils/fetch";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
 import toast from "react-hot-toast";
@@ -27,6 +27,7 @@ const ConfigModal = ({
   zapId: string;
   type: "trigger" | "action";
 }) => {
+  const queryClient = useQueryClient();
   const { data: appsData } = useQuery(appsQuery);
   const { data: triggersData } = useQuery(availableTriggersQuery);
   const { data: actionsData } = useQuery(availableActionsQuery);
@@ -172,6 +173,7 @@ const ConfigModal = ({
           ? `/triggers/${zapId}/configure`
           : `/actions/${zapId}/configure`;
       await customFetch.post(endpoint, payload);
+      queryClient.invalidateQueries({ queryKey: ["zaps"] });
       onClose(); // Close the modal after successful save
     } catch (error) {
       console.error(`Error saving ${type}:`, error);
