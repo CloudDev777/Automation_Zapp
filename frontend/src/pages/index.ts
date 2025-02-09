@@ -5,4 +5,4 @@ export { default as DashboardPage } from "./DashboardPage";
 export { default as ZapsPage } from "./ZapsPage";
 export { default as HistoryPage } from "./HistoryPage";
 export { default as ProfilePage } from "./ProfilePage";
-export { default as CreateZapPage } from "./CreateZapPage";
+export { default as ZapDraftPage } from "./ZapDraftPage";
