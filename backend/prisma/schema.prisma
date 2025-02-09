@@ -70,6 +70,8 @@ model Connection {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   Zap            Zap[]
+  Action         Action[]
+  Trigger        Trigger[]
 }
 
 model Zap {
@@ -95,15 +97,17 @@ enum ZapStatus {
 }
 
 model Trigger {
-  id        String           @id @default(uuid())
-  zapId     String           @unique
-  triggerId String
-  appId     String
-  app       App              @relation(fields: [appId], references: [id])
-  config    Json
-  metadata  Json             @default("{}")
-  type      AvailableTrigger @relation(fields: [triggerId], references: [id])
-  zap       Zap              @relation(fields: [zapId], references: [id], onDelete: Cascade)
+  id           String           @id @default(uuid())
+  zapId        String           @unique
+  triggerId    String
+  appId        String
+  app          App              @relation(fields: [appId], references: [id])
+  config       Json
+  metadata     Json             @default("{}")
+  type         AvailableTrigger @relation(fields: [triggerId], references: [id])
+  zap          Zap              @relation(fields: [zapId], references: [id], onDelete: Cascade)
+  connectionId String?
+  connection   Connection?      @relation(fields: [connectionId], references: [id], onDelete: Cascade)
 }
 
 model Action {
@@ -117,6 +121,8 @@ model Action {
   metadata     Json            @default("{}")
   type         AvailableAction @relation(fields: [actionId], references: [id])
   sortingOrder Int             @default(0)
+  connectionId String?
+  connection   Connection?     @relation(fields: [connectionId], references: [id], onDelete: Cascade)
 }
 
 model AvailableAction {
