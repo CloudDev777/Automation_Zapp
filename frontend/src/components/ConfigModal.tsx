@@ -6,21 +6,25 @@ import {
   connectionsQuery,
 } from "@/lib/queries";
 import useZapCreationStore from "@/store/zapStore";
+import customFetch from "@/utils/fetch";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
+import toast from "react-hot-toast";
 
 const ConfigModal = ({
   isOpen,
   onClose,
   onSelectNewApp,
   initialAppId,
+  zapId,
   type,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSelectNewApp: () => void;
   initialAppId: string;
+  zapId: string;
   type: "trigger" | "action";
 }) => {
   const { data: appsData } = useQuery(appsQuery);
@@ -28,7 +32,7 @@ const ConfigModal = ({
   const { data: actionsData } = useQuery(availableActionsQuery);
   const { data: connectionsData } = useQuery(connectionsQuery(initialAppId));
   const { setTriggerId, setTriggerName } = useZapCreationStore();
-  const [selectedId, setSelectedId] = React.useState("");
+  const [selectedTriggerId, setSelectedTriggerId] = React.useState("");
   const [showConnectionModal, setShowConnectionModal] = React.useState(false);
   const [selectedConnection, setSelectedConnection] = React.useState<{
     id: string;
@@ -132,9 +136,49 @@ const ConfigModal = ({
   );
 
   if (!isOpen) return null;
-  console.log("selectedConnection: ", selectedConnection);
-  console.log("selectedId: ", selectedId);
   console.log("connections: ", connections);
+  console.log("selectedConnection: ", selectedConnection);
+  console.log("selectedTriggerId: ", selectedTriggerId);
+  console.log("zapId: ", zapId);
+  console.log("initialAppId: ", initialAppId);
+
+  async function handleOnClick() {
+    if (!selectedConnection?.id) {
+      toast.error("Please select a connection.");
+      return;
+    }
+
+    if (!selectedTriggerId) {
+      toast.error(`Please select a ${type}.`);
+      return;
+    }
+
+    const payload = {
+      appId: initialAppId,
+      connectionId: selectedConnection.id,
+      zapId: zapId,
+      config: {
+        name: "this is config",
+      },
+      metadata: {
+        name: "this is meta data",
+      },
+      [type === "trigger" ? "triggerId" : "actionId"]: selectedTriggerId, // Dynamic key based on type
+    };
+
+    try {
+      const endpoint =
+        type === "trigger"
+          ? `/triggers/${zapId}/configure`
+          : `/actions/${zapId}/configure`;
+      await customFetch.post(endpoint, payload);
+      onClose(); // Close the modal after successful save
+    } catch (error) {
+      console.error(`Error saving ${type}:`, error);
+      alert(`Failed to save ${type}. Please try again.`);
+    }
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-[520px] mx-4">
@@ -181,19 +225,19 @@ const ConfigModal = ({
             </label>
             <select
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-purple-500 focus:border-purple-500"
-              value={selectedId}
+              value={selectedTriggerId}
               onChange={(e) => {
-                setSelectedId(e.target.value);
+                const selectedItem = filteredItems?.find(
+                  (item: any) => item.id === e.target.value
+                );
+                setSelectedTriggerId(e.target.value);
                 setTriggerId(e.target.value);
+                setTriggerName(selectedItem?.name || ""); // ✅ Set trigger name here
               }}
             >
               <option value="">Select...</option>
               {filteredItems?.map((item: any) => (
-                <option
-                  key={item.id}
-                  onChange={() => setTriggerName(item.name)}
-                  value={item.id}
-                >
+                <option key={item.id} value={item.id}>
                   {item.name}
                 </option>
               ))}
@@ -238,8 +282,9 @@ const ConfigModal = ({
               Cancel
             </button>
             <button
+              onClick={handleOnClick}
               className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50"
-              disabled={!selectedId}
+              disabled={!selectedTriggerId || !selectedConnection?.id} // Disable if no trigger or connection is selected
             >
               Save
             </button>
