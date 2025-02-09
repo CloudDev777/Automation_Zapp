@@ -38,7 +38,9 @@ const DashboardCardsList = () => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500">Connected Apps</p>
-            <h3 className="text-2xl font-bold text-gray-800">0</h3>
+            <h3 className="text-2xl font-bold text-gray-800">
+              {isLoading ? "0" : data.connectedApps}
+            </h3>
           </div>
           <div className="p-3 bg-blue-100 rounded-full">
             <QrCode className="text-blue-600 h-5 w-5" />
