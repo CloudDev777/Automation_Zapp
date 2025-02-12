@@ -44,6 +44,7 @@ const ZapDraftPage = () => {
   const { zapId } = useLoaderData();
   const [isAppModalOpen, setIsAppModalOpen] = React.useState(false);
   const [isConfigModalOpen, setIsConfigModalOpen] = React.useState(false);
+  console.log(isConfigModalOpen);
   const [selectedAppId, setSelectedAppId] = React.useState("");
   const [currentBlockType, setCurrentBlockType] = React.useState<
     "trigger" | "action"
@@ -101,6 +102,7 @@ const ZapDraftPage = () => {
                   index={index}
                   name={action?.actionName}
                   id={block.id}
+                  setIsConfigModalOpen={setIsConfigModalOpen}
                   type={block.type}
                 />
               </React.Fragment>
