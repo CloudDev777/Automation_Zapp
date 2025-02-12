@@ -16,6 +16,7 @@ const BlockComponent = ({
 }) => {
   const openModal = useWorkflowStore((state) => state.openModal);
   const zapData = useZapCreationStore((state) => state.zapData);
+  console.log(zapData);
 
   const blockStyles =
     type === "trigger"
