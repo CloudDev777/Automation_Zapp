@@ -1,21 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import customFetch from "@/utils/fetch";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useWorkflowStore } from "@/store/workflowStore";
 
 const CreateZapHeader = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  async function handleOnClick() {
-    try {
+  const { resetWorkflow } = useWorkflowStore();
+  const createZapMutation = useMutation({
+    mutationFn: async () => {
       const response = await customFetch.post("/zaps");
-      const { data } = response;
+      return response.data;
+    },
+    onSuccess: (data) => {
+      resetWorkflow();
       queryClient.invalidateQueries({ queryKey: ["zaps"] });
       navigate(`/dashboard/zaps/draft/${data.zap.id}`);
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("Error creating Zap:", error);
-    }
-  }
+      // You could add toast notification or error handling here
+    },
+  });
 
   return (
     <header className="bg-white border border-neutral-200/20 rounded-lg p-4 mb-6">
@@ -27,10 +33,13 @@ const CreateZapHeader = () => {
           </p>
         </div>
         <button
-          onClick={handleOnClick}
-          className="border border-neutral-200/20 bg-primary hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-300"
+          onClick={() => createZapMutation.mutate()}
+          disabled={createZapMutation.isPending}
+          className={`border border-neutral-200/20 bg-primary hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-300 ${
+            createZapMutation.isPending ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          Create
+          {createZapMutation.isPending ? "Creating..." : "Create"}
         </button>
       </div>
     </header>
