@@ -22,7 +22,9 @@ const CreateZapHeader = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Create Zap</h1>
-          <p className="hidden lg:block text-sm text-gray-500">Create a Zap</p>
+          <p className="hidden lg:block text-sm text-gray-500">
+            Set up your automation
+          </p>
         </div>
         <button
           onClick={handleOnClick}
