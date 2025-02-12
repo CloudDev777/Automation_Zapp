@@ -4,12 +4,14 @@ import useZapCreationStore from "@/store/zapStore";
 const BlockComponent = ({
   id,
   index,
+  setIsConfigModalOpen,
   type,
   name,
 }: {
   id: string;
   type: "trigger" | "action";
   index?: number;
+  setIsConfigModalOpen?: (value: boolean) => void;
   name?: string;
 }) => {
   const openModal = useWorkflowStore((state) => state.openModal);
@@ -23,7 +25,11 @@ const BlockComponent = ({
 
   return (
     <div
-      onClick={() => openModal(id)}
+      onClick={() => {
+        openModal(id);
+        // @ts-ignore
+        setIsConfigModalOpen((prev) => !prev);
+      }}
       className={`${blockStyles} cursor-pointer rounded-lg p-4 w-64 mx-auto hover:shadow-lg transition-all`}
     >
       <div className="flex items-center justify-between">
