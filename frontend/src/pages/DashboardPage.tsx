@@ -9,7 +9,7 @@ const DashboardPage = () => {
         description="Welcome to your dashboard"
       />
       <DashboardCardsList />
-      <ZapListTable />
+      <ZapListTable dashboard={true} />
     </>
   );
 };
