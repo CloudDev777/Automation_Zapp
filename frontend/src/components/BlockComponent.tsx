@@ -4,10 +4,6 @@ import useZapCreationStore from "@/store/zapStore";
 // TODO: FIX THE BUG, ACTIONS ARE NOT SAVING IN ZUSTAND STORE.
 // TODO: LOAD THE ZAP DETAILS IF IT EXISTS.
 
-
-
-
-
 const BlockComponent = ({
   id,
   index,
