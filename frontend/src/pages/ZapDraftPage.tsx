@@ -63,6 +63,7 @@ const ZapDraftPage = () => {
   const handleAppSelect = (appId: string) => {
     if (pendingBlockType) {
       addBlock(pendingBlockType);
+      console.log(pendingBlockType)
       // You might want to store the selected app ID in your store here
     }
     setIsAppModalOpen(false);
