@@ -19,7 +19,7 @@ export const loader = (queryClient: QueryClient) => async () => {
   }
 };
 
-const ZapListTable = () => {
+const ZapListTable = ({ dashboard }: { dashboard?: boolean }) => {
   const { data, isLoading } = useQuery(zapsQuery);
   const zaps: ZapType[] = data?.zaps;
   const {
@@ -58,9 +58,11 @@ const ZapListTable = () => {
                         {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Edit
                         </th> */}
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
-                        </th>
+                        {!dashboard && (
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                          </th>
+                        )}
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-neutral-200/20">
@@ -131,6 +133,7 @@ const ZapListTable = () => {
                               {/* @ts-ignore */}
                               {createdFromNow}
                             </td>
+
                             {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               <Link
                                 to={`/dashboard/zaps/draft/${zap.id}`}
@@ -140,11 +143,12 @@ const ZapListTable = () => {
                               </Link>
                             </td> */}
 
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium gap-1 flex">
-                              {/* //TODO: Add START button */}
-
-                              <DeleteZapModal zapId={zap.id} />
-                            </td>
+                            {!dashboard && (
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium gap-1 flex">
+                                {/* //TODO: Add START button */}
+                                <DeleteZapModal zapId={zap.id} />
+                              </td>
+                            )}
                           </tr>
                         );
                       })}
