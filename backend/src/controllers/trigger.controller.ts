@@ -104,7 +104,7 @@ export const configureTrigger = async (req: Request, res: Response) => {
   //TODO:  validate input
   const userId = req.user?.userId;
   const { zapId } = req.params;
-  const { triggerId, config, metadata } = req.body;
+  const { triggerId, config, metadata, connectionId } = req.body;
 
   // Verify the Zap exists and belongs to the user
   const existingZap = await prismaClient.zap.findUnique({
@@ -135,6 +135,7 @@ export const configureTrigger = async (req: Request, res: Response) => {
     update: {
       triggerId: availableTrigger.id,
       metadata: config,
+      connectionId,
     },
 
     create: {
@@ -143,6 +144,7 @@ export const configureTrigger = async (req: Request, res: Response) => {
       metadata,
       triggerId: availableTrigger.id,
       appId: availableTrigger.appId,
+      connectionId,
     },
     include: {
       type: true,
