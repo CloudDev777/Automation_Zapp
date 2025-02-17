@@ -34,6 +34,7 @@ export enum ZapStatus {
   ACTIVE = "ACTIVE",
   PAUSED = "PAUSED",
   ERROR = "ERROR",
+  PUBLISHED = "PUBLISHED",
 }
 export type Zap = {
   id: string; // UUID
