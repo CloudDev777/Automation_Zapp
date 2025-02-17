@@ -16,22 +16,24 @@ type PublishResponse = {
 const PublishModal = ({
   isOpen,
   onClose,
+  zapId,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  zapId: string;
 }) => {
   const [zapName, setLocalZapName] = useState("");
   const [error, setError] = useState("");
-  const { setZapName, zapData, resetZap } = useZapCreationStore();
+  const { setZapName, resetZap } = useZapCreationStore();
   const { resetWorkflow } = useWorkflowStore();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
   // Add your API mutation
 
-  const publishMutation = useMutation<PublishResponse, Error, typeof zapData>({
+  const publishMutation = useMutation<PublishResponse, Error, string>({
     mutationFn: async (data) => {
-      const response = await customFetch.post("/zaps", data);
+      const response = await customFetch.patch(`/zaps/${zapId}/publish`, data);
       return response.data;
     },
     onSuccess: () => {
@@ -56,8 +58,7 @@ const PublishModal = ({
     setError("");
     setZapName(zapName);
 
-    const payload = { ...zapData, zapName }; // Include the updated zapName
-    publishMutation.mutate(payload);
+    publishMutation.mutate(zapName);
   };
 
   if (!isOpen) return null;
@@ -114,19 +115,19 @@ const PublishModal = ({
 interface Props {
   title: string;
   description: string;
+  zapId: string;
 }
 
-const ZapPublishButton = ({ title, description }: Props) => {
+const ZapPublishButton = ({ title, description, zapId }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const zapData = useZapCreationStore((state) => state.zapData);
+
   // Validation function to check if we have required data
   const isPublishEnabled = () => {
-    const hasActions = zapData.actions.length > 0;
     const hasTriggerId = Boolean(zapData.availableTriggerId);
 
-    return hasActions && hasTriggerId;
+    return hasTriggerId;
   };
-  zapData;
 
   return (
     <>
@@ -163,6 +164,7 @@ const ZapPublishButton = ({ title, description }: Props) => {
 
       <PublishModal
         isOpen={isModalOpen}
+        zapId={zapId}
         onClose={() => setIsModalOpen(false)}
       />
     </>
