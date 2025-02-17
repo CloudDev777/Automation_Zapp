@@ -63,7 +63,7 @@ const ZapDraftPage = () => {
   const handleAppSelect = (appId: string) => {
     if (pendingBlockType) {
       addBlock(pendingBlockType);
-      console.log(pendingBlockType)
+      console.log("pendingBlockType", pendingBlockType);
       // You might want to store the selected app ID in your store here
     }
     setIsAppModalOpen(false);
@@ -80,6 +80,7 @@ const ZapDraftPage = () => {
   return (
     <>
       <ZapPublishButton
+        zapId={zapId}
         title="Zaps"
         description="Create and customize your automation workflow"
       />
