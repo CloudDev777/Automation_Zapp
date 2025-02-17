@@ -11,6 +11,8 @@ import {
   deleteZap,
   getAllZaps,
   getSingleZap,
+  publishZap,
+  toggleZap,
 } from "../controllers/zap.controller";
 
 router.route("/").post(
@@ -37,5 +39,17 @@ router
       authenticateUser(req, res, next),
     (req: Request, res: Response, next: NextFunction) => deleteZap(req, res)
   );
+
+router.route("/:zapId/publish").patch(
+  (req: Request, res: Response, next: NextFunction) =>
+    authenticateUser(req, res, next),
+  (req: Request, res: Response, next: NextFunction) => publishZap(req, res)
+);
+
+router.route("/:zapId/toggle").patch(
+  (req: Request, res: Response, next: NextFunction) =>
+    authenticateUser(req, res, next),
+  (req: Request, res: Response, next: NextFunction) => toggleZap(req, res)
+);
 
 export default router;
