@@ -166,6 +166,7 @@ const ConfigModal = ({
       },
       [type === "trigger" ? "triggerId" : "actionId"]: selectedTriggerId, // Dynamic key based on type
     };
+    console.log("payload: ", payload);
 
     try {
       const endpoint =
