@@ -96,7 +96,7 @@ export const configureAction = async (req: Request, res: Response) => {
   // TODO: Validate input
   const userId = req.user?.userId;
   const { zapId } = req.params;
-  const { actionId, config, metadata } = req.body;
+  const { actionId, config, metadata, connectionId } = req.body;
 
   // Verify the Zap exists and belongs to the user
   const existingZap = await prismaClient.zap.findUnique({
@@ -135,6 +135,7 @@ export const configureAction = async (req: Request, res: Response) => {
       metadata: metadata,
       sortingOrder: actionCount + 1, // Automatically set sortingOrder
       appId: availableAction.appId,
+      connectionId,
     },
     include: {
       type: true,
