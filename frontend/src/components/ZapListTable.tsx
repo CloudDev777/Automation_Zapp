@@ -9,6 +9,7 @@ import { redirect } from "react-router-dom";
 import NoZapFound from "./NoZapFound";
 import { WEBHOOK_BASE_URL } from "@/lib/links";
 import CopyableWebhookUrl from "./CopyableWebhookUrl";
+import ZapToggleSwitch from "./ZapToggleButton";
 
 export const loader = (queryClient: QueryClient) => async () => {
   try {
@@ -20,6 +21,21 @@ export const loader = (queryClient: QueryClient) => async () => {
 };
 
 const ZapListTable = ({ dashboard }: { dashboard?: boolean }) => {
+  const getStatusColor = (status: ZapStatus) => {
+    switch (status) {
+      case "PUBLISHED":
+        return "bg-green-100 text-green-800";
+      case "DRAFT":
+        return "bg-gray-100 text-gray-800";
+      case "PAUSED":
+        return "bg-yellow-100 text-yellow-800";
+      case "ERROR":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
   const { data, isLoading } = useQuery(zapsQuery);
   const zaps: ZapType[] = data?.zaps;
   const {
@@ -59,9 +75,14 @@ const ZapListTable = ({ dashboard }: { dashboard?: boolean }) => {
                           Edit
                         </th> */}
                         {!dashboard && (
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
-                          </th>
+                          <>
+                            <th className="px-6 py-3  text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Toggle
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Actions
+                            </th>
+                          </>
                         )}
                       </tr>
                     </thead>
@@ -120,11 +141,9 @@ const ZapListTable = ({ dashboard }: { dashboard?: boolean }) => {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap hidden md:block">
                               <span
-                                className={`px-2 inline-flex text-xs leading-5 mt-3 font-semibold rounded-full ${
-                                  zap.status === ZapStatus.ACTIVE
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-yellow-100 text-yellow-800"
-                                }`}
+                                className={`px-2 inline-flex text-xs leading-5 mt-3 font-semibold rounded-full ${getStatusColor(
+                                  zap.status
+                                )}`}
                               >
                                 {zap.status}
                               </span>
@@ -144,8 +163,15 @@ const ZapListTable = ({ dashboard }: { dashboard?: boolean }) => {
                             </td> */}
 
                             {!dashboard && (
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium gap-1 flex">
-                                {/* //TODO: Add START button */}
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium gap-1">
+                                <ZapToggleSwitch
+                                  zapId={zap.id}
+                                  initialStatus={zap.status}
+                                />
+                              </td>
+                            )}
+                            {!dashboard && (
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium gap-1 ">
                                 <DeleteZapModal zapId={zap.id} />
                               </td>
                             )}
