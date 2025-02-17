@@ -100,7 +100,7 @@ app.use("/api/v1/actions", actionRouter);
 app.use("/api/v1/newsletter", newsletterRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
 app.use("/api/v1/apps", appRouter);
-
+  
 // Serve static files in production
 // Uncomment the below line if you have a frontend to serve in production
 // app.get("*", (req: Request, res: Response) => {
