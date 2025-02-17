@@ -138,7 +138,9 @@ export type CreateAvailableTriggerInput = z.infer<
 
 export const createAppSchema = z.object({
   id: z.string().optional(),
-  name: z.string({ required_error: "App name is required" }),
+  name: z.string({ required_error: "App name is required" }).min(1, {
+    message: "App name is required",
+  }),
   description: z.string().optional(),
   image: z.string().optional(),
 });
