@@ -37,7 +37,7 @@ export const registerUser = async (
   const verificationToken = randomBytes(40).toString("hex");
 
   // Create a new user in the database
-  const user = await prismaClient.user.create({
+  await prismaClient.user.create({
     data: {
       name,
       email,
