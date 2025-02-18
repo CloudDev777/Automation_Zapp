@@ -13,6 +13,7 @@ import {
   updateApp,
   deleteApp,
 } from "../controllers/app.controller";
+import { CreateAppInput } from "../types";
 
 const router = Router();
 
@@ -29,7 +30,8 @@ router
     authorizePermissions("admin"),
     imageUploadMiddleware.single("image"),
     validateAppInputMiddleware,
-    (req: Request, res: Response, next: NextFunction) => createApp(req, res)
+    (req: Request<{}, {}, CreateAppInput>, res: Response, next: NextFunction) =>
+      createApp(req, res)
   );
 
 router
@@ -48,7 +50,7 @@ router
     authorizePermissions("admin"),
     imageUploadMiddleware.single("image"),
     validateAppInputMiddleware,
-    async (req: Request<{ id: string }>, res: Response) => {
+    async (req: Request<{ id: string }, {}, CreateAppInput>, res: Response) => {
       await updateApp(req, res);
     }
   );
