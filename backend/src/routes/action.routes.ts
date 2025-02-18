@@ -14,6 +14,7 @@ import {
   updateAvailableAction,
 } from "../controllers/action.controller";
 import { validateAvailableActionInputMiddleware } from "../middlewares/validationMiddleware";
+import { ConfigureActionSchema, CreateAvailableActionInput } from "../types";
 
 router
   .route("/")
@@ -29,7 +30,7 @@ router
     authorizePermissions("admin"),
     imageUploadMiddleware.single("image"),
     validateAvailableActionInputMiddleware,
-    (req: Request, res: Response, next: NextFunction) =>
+    (req: Request<{}, {}, CreateAvailableActionInput>, res: Response) =>
       createAvailableAction(req, res)
   );
 
@@ -57,7 +58,10 @@ router
 router.route("/:zapId/configure").post(
   (req: Request, res: Response, next: NextFunction) =>
     authenticateUser(req, res, next),
-  async (req: Request, res: Response) => {
+  async (
+    req: Request<{ zapId: string }, {}, ConfigureActionSchema>,
+    res: Response
+  ) => {
     await configureAction(req, res);
   }
 );
