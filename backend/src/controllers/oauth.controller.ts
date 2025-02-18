@@ -58,6 +58,32 @@ export const oAuthCallback = async (req: Request, res: Response) => {
       connectedEmail: profile.data.emailAddress,
     },
   });
+
+  // await prismaClient.connection.upsert({
+  //   where: {
+  //     userId_appId: {
+  //       userId: req.user?.userId,
+  //       appId: gmailApp.id,
+  //     },
+  //   },
+  //   update: {
+  //     userId: req.user.userId, // Replace with actual user ID
+  //     accessToken: tokens.access_token!,
+  //     refreshToken: tokens.refresh_token!,
+  //     expiresAt: new Date(Date.now() + tokens.expiry_date!),
+  //     appId: gmailApp.id,
+  //     connectedEmail: profile.data.emailAddress,
+  //   },
+  //   create: {
+  //     userId: req.user.userId, // Replace with actual user ID
+  //     accessToken: tokens.access_token!,
+  //     refreshToken: tokens.refresh_token!,
+  //     expiresAt: new Date(Date.now() + tokens.expiry_date!),
+  //     appId: gmailApp.id,
+  //     connectedEmail: profile.data.emailAddress,
+  //   },
+  // });
+  
   // Respond with success message and user details
   res.send(`
      <html>
