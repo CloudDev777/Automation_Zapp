@@ -72,6 +72,8 @@ model Connection {
   Zap            Zap[]
   Action         Action[]
   Trigger        Trigger[]
+
+  @@unique([userId, appId]) // Ensure uniqueness
 }
 
 model Zap {
