@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { prismaClient } from "../db";
-import { CreateAvailableTriggerInput } from "../types";
+import { ConfigureTriggerSchema, CreateAvailableTriggerInput } from "../types";
 import { NotFoundError } from "../errors";
 
 export const createAvailableTrigger = async (
@@ -42,7 +42,10 @@ export const getAvailableTrigger = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ availableTriggers });
 };
 
-export const updateAvailableTrigger = async (req: Request, res: Response) => {
+export const updateAvailableTrigger = async (
+  req: Request<{ id: string }, {}, CreateAvailableTriggerInput>,
+  res: Response
+) => {
   const { id } = req.params;
   let { name, description, appId } = req.body;
 
@@ -76,7 +79,10 @@ export const updateAvailableTrigger = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ availableTrigger });
 };
 
-export const deleteAvailableTrigger = async (req: Request, res: Response) => {
+export const deleteAvailableTrigger = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   const { id } = req.params;
 
   const exists = await prismaClient.availableTrigger.findFirst({
@@ -100,8 +106,10 @@ export const deleteAvailableTrigger = async (req: Request, res: Response) => {
     .json({ msg: `Available Trigger with id: ${id} is deleted successfully!` });
 };
 
-export const configureTrigger = async (req: Request, res: Response) => {
-  //TODO:  validate input
+export const configureTrigger = async (
+  req: Request<{ zapId: string }, {}, ConfigureTriggerSchema>,
+  res: Response
+) => {
   const userId = req.user?.userId;
   const { zapId } = req.params;
   const { triggerId, config, metadata, connectionId } = req.body;
