@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { prismaClient } from "../db";
-import { CreateAvailableActionInput } from "../types";
+import { ConfigureActionSchema, CreateAvailableActionInput } from "../types";
 import { NotFoundError } from "../errors";
 
 export const createAvailableAction = async (
@@ -36,7 +36,10 @@ export const getAvailableAction = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ availableActions });
 };
 
-export const updateAvailableAction = async (req: Request, res: Response) => {
+export const updateAvailableAction = async (
+  req: Request<{ id: string }, {}, CreateAvailableActionInput>,
+  res: Response
+) => {
   const { id } = req.params;
   let { name, description, appId } = req.body;
 
@@ -70,7 +73,10 @@ export const updateAvailableAction = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ availableActions });
 };
 
-export const deleteAvailableAction = async (req: Request, res: Response) => {
+export const deleteAvailableAction = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   const { id } = req.params;
 
   const exists = await prismaClient.availableAction.findFirst({
@@ -92,8 +98,10 @@ export const deleteAvailableAction = async (req: Request, res: Response) => {
     .json({ msg: `Available Action with id: ${id} is deleted successfully!` });
 };
 
-export const configureAction = async (req: Request, res: Response) => {
-  // TODO: Validate input
+export const configureAction = async (
+  req: Request<{ zapId: string }, {}, ConfigureActionSchema>,
+  res: Response
+) => {
   const userId = req.user?.userId;
   const { zapId } = req.params;
   const { actionId, config, metadata, connectionId } = req.body;
