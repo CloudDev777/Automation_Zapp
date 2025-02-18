@@ -43,7 +43,10 @@ export const getAllApps = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ apps });
 };
 
-export const updateApp = async (req: Request, res: Response) => {
+export const updateApp = async (
+  req: Request<{ id: string }, {}, CreateAppInput>,
+  res: Response
+) => {
   const { id } = req.params;
   let { name, image } = req.body;
   const exists = await prismaClient.app.findFirst({
@@ -56,7 +59,7 @@ export const updateApp = async (req: Request, res: Response) => {
 
   if (req.file) {
     const res = await FirebaseImageHandler.updateImage({
-      oldImageUrl: image,
+      oldImageUrl: image || "",
       newImage: req.file,
     });
     if (!res) {
@@ -78,7 +81,10 @@ export const updateApp = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ app });
 };
 
-export const deleteApp = async (req: Request, res: Response) => {
+export const deleteApp = async (
+  req: Request<{ id: string }>,
+  res: Response
+) => {
   const { id } = req.params;
 
   const exists = await prismaClient.app.findFirst({
