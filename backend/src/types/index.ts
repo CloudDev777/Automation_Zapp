@@ -1,3 +1,4 @@
+import { configureAction } from "./../controllers/action.controller";
 import { string, z } from "zod";
 import { prismaClient } from "../db";
 
@@ -146,3 +147,33 @@ export const createAppSchema = z.object({
 });
 
 export type CreateAppInput = z.infer<typeof createAppSchema>;
+
+export const configureActionSchema = z.object({
+  actionId: z.string({ required_error: "actionId name is required" }).min(1, {
+    message: "actionId name is required",
+  }),
+  connectionId: z
+    .string({ required_error: "connectionId name is required" })
+    .min(1, {
+      message: "connectionId name is required",
+    }),
+  config: z.any({ required_error: "config is required" }),
+  metadata: z.any({ required_error: "metadata is required" }),
+});
+
+export type ConfigureActionSchema = z.infer<typeof configureActionSchema>;
+
+export const configureTriggerSchema = z.object({
+  triggerId: z.string({ required_error: "triggerId name is required" }).min(1, {
+    message: "triggerId name is required",
+  }),
+  connectionId: z
+    .string({ required_error: "connectionId name is required" })
+    .min(1, {
+      message: "connectionId name is required",
+    }),
+  config: z.any({ required_error: "config is required" }),
+  metadata: z.any({ required_error: "metadata is required" }),
+});
+
+export type ConfigureTriggerSchema = z.infer<typeof configureTriggerSchema>;
