@@ -58,6 +58,7 @@ const ConfigModal = ({
   }, [initialAppId, type, triggersData, actionsData]);
 
   const handleConnect = async () => {
+    // TODO: Update after adding new connection
     const authWindow = window.open(
       OAUTH_GMAIL,
       "Connect the account",
