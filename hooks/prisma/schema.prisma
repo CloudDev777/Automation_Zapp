@@ -8,22 +8,23 @@ datasource db {
 }
 
 model User {
-  id                          Int       @id @default(autoincrement())
+  id                          Int          @id @default(autoincrement())
   name                        String
-  email                       String    @unique
+  email                       String       @unique
   password                    String
-  role                        String    @default("user")
+  role                        String       @default("user")
   verificationToken           String?
-  isVerified                  Boolean   @default(true)
+  isVerified                  Boolean      @default(true)
   verified                    DateTime?
   passwordToken               String?
   passwordTokenExpirationDate DateTime?
-  createdAt                   DateTime  @default(now())
-  updatedAt                   DateTime  @updatedAt
+  createdAt                   DateTime     @default(now())
+  updatedAt                   DateTime     @updatedAt
+  company                     String?
+  image                       String?
+  Connection                  Connection[]
   Token                       Token[]
   zaps                        Zap[]
-  image                       String?
-  company                     String?
 }
 
 model Newsletter {
@@ -39,61 +40,104 @@ model Token {
   userAgent    String
   isValid      Boolean  @default(true)
   userId       Int
-  user         User     @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model App {
+  id          String             @id @default(uuid())
+  name        String             @unique
+  description String?
+  icon        String?
+  Action      Action[]
+  actions     AvailableAction[]
+  triggers    AvailableTrigger[]
+  connections Connection[]
+  Trigger     Trigger[]
+}
+
+model Connection {
+  id             String    @id @default(uuid())
+  userId         Int
+  appId          String
+  accessToken    String
+  refreshToken   String?
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  connectedEmail String?
+  Action         Action[]
+  app            App       @relation(fields: [appId], references: [id])
+  user           User      @relation(fields: [userId], references: [id])
+  Trigger        Trigger[]
 }
 
 model Zap {
-  id                 String   @id @default(uuid())
-  zapName            String
-  availableTriggerId String
+  id                 String    @id @default(uuid())
+  availableTriggerId String?
   userId             Int
-  trigger            Trigger?
+  zapName            String?   @default("Untitled Zap")
+  createdAt          DateTime  @default(now())
+  status             ZapStatus @default(DRAFT)
   actions            Action[]
+  trigger            Trigger?
+  user               User      @relation(fields: [userId], references: [id])
   zapRuns            ZapRun[]
-  user               User     @relation(fields: [userId], references: [id])
-  createdAt          DateTime @default(now())
-  isActive           Boolean  @default(true)
 }
 
 model Trigger {
-  id        String           @id @default(uuid())
-  zapId     String           @unique
-  triggerId String
-  metadata  Json             @default("{}")
-  type      AvailableTrigger @relation(fields: [triggerId], references: [id])
-  zap       Zap              @relation(fields: [zapId], references: [id], onDelete: Cascade)
+  id           String           @id @default(uuid())
+  zapId        String           @unique
+  triggerId    String
+  metadata     Json             @default("{}")
+  appId        String
+  config       Json
+  connectionId String?
+  app          App              @relation(fields: [appId], references: [id])
+  connection   Connection?      @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  type         AvailableTrigger @relation(fields: [triggerId], references: [id])
+  zap          Zap              @relation(fields: [zapId], references: [id], onDelete: Cascade)
 }
 
 model Action {
   id           String          @id @default(uuid())
   zapId        String
-  zap          Zap             @relation(fields: [zapId], references: [id], onDelete: Cascade)
   actionId     String
   metadata     Json            @default("{}")
-  type         AvailableAction @relation(fields: [actionId], references: [id])
   sortingOrder Int             @default(0)
+  appId        String
+  config       Json
+  connectionId String?
+  type         AvailableAction @relation(fields: [actionId], references: [id])
+  app          App             @relation(fields: [appId], references: [id])
+  connection   Connection?     @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  zap          Zap             @relation(fields: [zapId], references: [id], onDelete: Cascade)
 }
 
 model AvailableAction {
-  id      String   @id @default(uuid())
-  name    String
-  image   String?
-  actions Action[]
+  id          String   @id @default(uuid())
+  name        String
+  appId       String
+  description String
+  actions     Action[]
+  app         App      @relation(fields: [appId], references: [id])
 }
 
 model AvailableTrigger {
-  id       String    @id @default(uuid())
-  name     String
-  image    String?
-  triggers Trigger[]
+  id          String    @id @default(uuid())
+  name        String
+  appId       String
+  description String
+  app         App       @relation(fields: [appId], references: [id])
+  triggers    Trigger[]
 }
 
 model ZapRun {
   id           String        @id @default(uuid())
   zapId        String
   metadata     Json
+  status       String        @default("active")
   zap          Zap           @relation(fields: [zapId], references: [id], onDelete: Cascade)
   zapRunOutbox ZapRunOutbox?
 }
@@ -102,4 +146,11 @@ model ZapRunOutbox {
   id       String @id @default(uuid())
   zapRunId String @unique
   zapRun   ZapRun @relation(fields: [zapRunId], references: [id], onDelete: Cascade)
+}
+
+enum ZapStatus {
+  DRAFT
+  PUBLISHED
+  PAUSED
+  ERROR
 }
