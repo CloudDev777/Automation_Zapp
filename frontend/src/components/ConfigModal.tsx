@@ -58,7 +58,6 @@ const ConfigModal = ({
   }, [initialAppId, type, triggersData, actionsData]);
 
   const handleConnect = async () => {
-    // TODO: Update after adding new connection
     const authWindow = window.open(
       OAUTH_GMAIL,
       "Connect the account",
@@ -85,6 +84,7 @@ const ConfigModal = ({
           email: event.data.connectedEmail,
         });
         window.removeEventListener("message", messageHandler);
+        queryClient.invalidateQueries({ queryKey: ["connections"] });
       } else {
         console.error("OAuth failed or incomplete data:", event.data);
       }
