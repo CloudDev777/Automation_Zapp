@@ -1,15 +1,10 @@
 import { useWorkflowStore } from "@/store/workflowStore";
-import useZapCreationStore from "@/store/zapStore";
-
-// TODO: FIX THE BUG, ACTIONS ARE NOT SAVING IN ZUSTAND STORE.
-// TODO: LOAD THE ZAP DETAILS IF IT EXISTS.
 
 const BlockComponent = ({
   id,
   index,
   setIsConfigModalOpen,
   type,
-  name,
 }: {
   id: string;
   type: "trigger" | "action";
@@ -18,7 +13,6 @@ const BlockComponent = ({
   name?: string;
 }) => {
   const openModal = useWorkflowStore((state) => state.openModal);
-  const zapData = useZapCreationStore((state) => state.zapData);
 
   const blockStyles =
     type === "trigger"
@@ -37,11 +31,8 @@ const BlockComponent = ({
     >
       <div className="flex items-center justify-between">
         <h3 className="font-semibold capitalize">
-          {type === "trigger"
-            ? `${index}. ${zapData.triggerName || "Trigger"}`
-            : `${index}. ${name || "Action"}`}
+          {type === "trigger" ? `${index}.  Trigger` : `${index}. Action`}
         </h3>
-
         <button
           className={`${
             type === "trigger"
@@ -50,13 +41,6 @@ const BlockComponent = ({
           }`}
         ></button>
       </div>
-      <p
-        className={`text-sm mt-2 ${
-          type === "trigger" ? "text-blue-600" : "text-green-600"
-        }`}
-      >
-        Configure your {type}
-      </p>
     </div>
   );
 };
