@@ -48,16 +48,43 @@ export const oAuthCallback = async (req: Request, res: Response) => {
   const gmail = google.gmail({ version: "v1", auth: oauth2Client });
   const profile = await gmail.users.getProfile({ userId: "me" });
 
-  await prismaClient.connection.create({
-    data: {
-      userId: req.user.userId, // Replace with actual user ID
-      accessToken: tokens.access_token!,
-      refreshToken: tokens.refresh_token!,
-      expiresAt: new Date(Date.now() + tokens.expiry_date!),
+  const connectionExists = await prismaClient.connection.findFirst({
+    where: {
+      userId: req.user.userId,
       appId: gmailApp.id,
       connectedEmail: profile.data.emailAddress,
     },
   });
+
+  if (connectionExists) {
+    await prismaClient.connection.update({
+      where: {
+        id: connectionExists.id,
+        userId: req.user.userId,
+        appId: gmailApp.id,
+        connectedEmail: profile.data.emailAddress,
+      },
+      data: {
+        userId: req.user.userId, // Replace with actual user ID
+        accessToken: tokens.access_token!,
+        refreshToken: tokens.refresh_token!,
+        expiresAt: new Date(Date.now() + tokens.expiry_date!),
+        appId: gmailApp.id,
+        connectedEmail: profile.data.emailAddress,
+      },
+    });
+  } else {
+    await prismaClient.connection.create({
+      data: {
+        userId: req.user.userId, // Replace with actual user ID
+        accessToken: tokens.access_token!,
+        refreshToken: tokens.refresh_token!,
+        expiresAt: new Date(Date.now() + tokens.expiry_date!),
+        appId: gmailApp.id,
+        connectedEmail: profile.data.emailAddress,
+      },
+    });
+  }
 
   res.send(`
      <html>
