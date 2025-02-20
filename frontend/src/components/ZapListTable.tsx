@@ -96,6 +96,7 @@ const ZapListTable = ({ dashboard }: { dashboard?: boolean }) => {
                         if (zap.trigger?.app) {
                           usedApps.set(zap.trigger.app.id, zap.trigger.app);
                         }
+                        console.log(zap)
 
                         // Add unique action apps
                         zap.actions.forEach((action) => {
