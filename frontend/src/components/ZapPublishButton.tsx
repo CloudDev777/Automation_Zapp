@@ -33,7 +33,9 @@ const PublishModal = ({
 
   const publishMutation = useMutation<PublishResponse, Error, string>({
     mutationFn: async (data) => {
-      const response = await customFetch.patch(`/zaps/${zapId}/publish`, data);
+      const response = await customFetch.patch(`/zaps/${zapId}/publish`, {
+        zapName: data,
+      });
       return response.data;
     },
     onSuccess: () => {
