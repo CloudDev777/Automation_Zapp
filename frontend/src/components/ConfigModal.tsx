@@ -18,11 +18,13 @@ const ConfigModal = ({
   onSelectNewApp,
   initialAppId,
   zapId,
+  setIsConfigInputModalOpen,
   type,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSelectNewApp: () => void;
+  setIsConfigInputModalOpen: (state: any) => void;
   initialAppId: string;
   zapId: string;
   type: "trigger" | "action";
@@ -117,6 +119,8 @@ const ConfigModal = ({
                   email: connection.connectedEmail,
                 });
                 setShowConnectionModal(false);
+                setIsConfigInputModalOpen((prev: any) => !prev);
+                onClose();
               }}
               className="w-full p-3 text-left border rounded-lg hover:bg-gray-50 flex items-center justify-between"
             >
@@ -277,7 +281,7 @@ const ConfigModal = ({
               </button>
             )}
           </div>
-
+          {/* 
           <div className="flex justify-end space-x-3 mt-6">
             <button
               onClick={onClose}
@@ -292,7 +296,7 @@ const ConfigModal = ({
             >
               Save
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
       {showConnectionModal && <ConnectionModal />}
