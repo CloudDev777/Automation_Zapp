@@ -92,7 +92,6 @@ model Trigger {
   triggerId    String
   metadata     Json             @default("{}")
   appId        String
-  config       Json
   connectionId String?
   app          App              @relation(fields: [appId], references: [id])
   connection   Connection?      @relation(fields: [connectionId], references: [id], onDelete: Cascade)
@@ -107,7 +106,6 @@ model Action {
   metadata     Json            @default("{}")
   sortingOrder Int             @default(0)
   appId        String
-  config       Json
   connectionId String?
   type         AvailableAction @relation(fields: [actionId], references: [id])
   app          App             @relation(fields: [appId], references: [id])
@@ -122,6 +120,7 @@ model AvailableAction {
   description String
   actions     Action[]
   app         App      @relation(fields: [appId], references: [id])
+  config      Json     @default("{}")
 }
 
 model AvailableTrigger {
@@ -131,6 +130,7 @@ model AvailableTrigger {
   description String
   app         App       @relation(fields: [appId], references: [id])
   triggers    Trigger[]
+  config      Json      @default("{}")
 }
 
 model ZapRun {
