@@ -25,6 +25,7 @@ export { default as CopyableWebhookUrl } from "./CopyableWebhookUrl";
 export { default as AddBlockButton } from "./AddBlockButton";
 export { default as AppSelectionModal } from "./AppSelectionModal";
 export { default as ConfigModal } from "./ConfigModal";
+export { default as ConfigModalInputModal } from "./ConfigInputModal";
 export { default as BlockComponent } from "./BlockComponent";
 export { default as EnhancedConfigModal } from "./EnhancedConfigModal";
 export { default as ConnectionSelector } from "./ConnectionSelector";
