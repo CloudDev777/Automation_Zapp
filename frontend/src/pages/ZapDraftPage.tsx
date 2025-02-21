@@ -3,6 +3,7 @@ import {
   AppSelectionModal,
   BlockComponent,
   ConfigModal,
+  ConfigModalInputModal,
   ZapPublishButton,
 } from "@/components";
 import {
@@ -44,6 +45,8 @@ const ZapDraftPage = () => {
   const { zapId } = useLoaderData();
   const [isAppModalOpen, setIsAppModalOpen] = React.useState(false);
   const [isConfigModalOpen, setIsConfigModalOpen] = React.useState(false);
+  const [isConfigInputModalOpen, setIsConfigInputModalOpen] =
+    React.useState(false);
   const [selectedAppId, setSelectedAppId] = React.useState("");
   const [currentBlockType, setCurrentBlockType] = React.useState<
     "trigger" | "action"
@@ -75,7 +78,9 @@ const ZapDraftPage = () => {
   const handleChangeApp = () => {
     setIsConfigModalOpen(false);
     setIsAppModalOpen(true);
+    setIsConfigInputModalOpen(false);
   };
+  console.log("isConfigInputModalOpen ", isConfigInputModalOpen);
 
   return (
     <>
@@ -127,6 +132,16 @@ const ZapDraftPage = () => {
         <ConfigModal
           isOpen={isConfigModalOpen}
           onClose={() => setIsConfigModalOpen(false)}
+          onSelectNewApp={handleChangeApp}
+          initialAppId={selectedAppId}
+          type={currentBlockType}
+          zapId={zapId}
+          setIsConfigInputModalOpen={() => setIsConfigInputModalOpen(true)}
+        />
+
+        <ConfigModalInputModal
+          isOpen={isConfigInputModalOpen}
+          onClose={() => setIsConfigInputModalOpen(false)}
           onSelectNewApp={handleChangeApp}
           initialAppId={selectedAppId}
           type={currentBlockType}
